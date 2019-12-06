@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Moodle Helper</string>
+    <string name="action_settings">Setting</string>
+    <string name="invalid_button">An invalid item has been clicked.</string>
+    <string name="prompt_uid">Portal UID: </string>
+    <string name="prompt_password">Portal PIN: </string>
+    <string name="initial_uid">HKU Portal Login name</string>
+    <string name="initial_pin">HKU Portal Login Password</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="click_to_course">Click to Enter the Course</string>
 </resources>

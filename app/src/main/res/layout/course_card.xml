@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/colorBackground"
+    android:elevation="3dp"
+    app:cardCornerRadius="10dp">
+
+    <TextView
+        android:id="@+id/couseTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:textColor="@color/colorText"
+        android:textSize="17sp"
+        android:textFontWeight="600"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="75dp"
+        android:layout_marginStart="70dp"
+        android:text="@string/click_to_course"
+        android:backgroundTint="@color/colorPrimaryShadow"
+        android:elevation="5dp"
+        android:textFontWeight="500"
+        android:textSize="17sp"
+        android:padding="15dp"/>
+
+</androidx.cardview.widget.CardView>
