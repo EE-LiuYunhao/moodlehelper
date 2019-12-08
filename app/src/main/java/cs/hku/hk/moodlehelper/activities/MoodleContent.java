@@ -1,29 +1,32 @@
-package cs.hku.hk.moodlehelper;
-
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+package cs.hku.hk.moodlehelper.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-public class SettingsActivity extends AppCompatActivity
-{
+import cs.hku.hk.moodlehelper.R;
 
+public class MoodleContent extends AppCompatActivity
+{
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_moodlecontent);
+
+        Intent intent = getIntent();
+        String courseName=intent.getStringExtra("courseName");
+        String courseURL=intent.getStringExtra("courseURL");
+        String uid=intent.getStringExtra("uid");
+        String pin=intent.getStringExtra("pin");
 
         //set the toolbar
         Toolbar toolbar = findViewById(R.id.settingsActivityToolBar);
-        toolbar.setLogo(R.drawable.ic_settings);
+        toolbar.setLogo(R.drawable.ic_main_activity_logo);
         setSupportActionBar(toolbar);
         //toolbar navigate
         toolbar.setNavigationIcon(R.drawable.ic_navigate_before_24dp);
@@ -38,16 +41,5 @@ public class SettingsActivity extends AppCompatActivity
                 finish();
             }
         });
-
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                //TODO: add new course info
-            }
-        });
     }
-
 }

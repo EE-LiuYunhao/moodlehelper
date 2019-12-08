@@ -8,4 +8,11 @@
     <string name="initial_pin">HKU Portal Login Password</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="click_to_course">Click to Enter the Course</string>
+    <string name="prompt_enter_course_name">Course Name: </string>
+    <string name="prompt_enter_course_url">Course url: </string>
+    <string name="example_course_name">e.g. HKUH1005</string>
+    <string name="example_course_url">e.g. https://moodle.hku.hk/php?id=133355</string>
+    <string name="confirm">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_course">No courses have been set!</string>
 </resources>

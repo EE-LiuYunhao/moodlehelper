@@ -1,15 +1,16 @@
-package cs.hku.hk.moodlehelper;
+package cs.hku.hk.moodlehelper.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+
+import cs.hku.hk.moodlehelper.R;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity
                 switch (item.getItemId())
                 {
                     case R.id.action_settings:
-                        Intent gotoSettings = new Intent(MainActivity.this,SettingsActivity.class);
+                        Intent gotoSettings = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(gotoSettings);
                         break;
                     default:
