@@ -15,4 +15,6 @@
     <string name="confirm">OK</string>
     <string name="cancel">Cancel</string>
     <string name="no_course">No courses have been set!</string>
+    <string name="wrong_url">Some error in resolving the course URL.</string>
+    <string name="delete_course_setting">Delete</string>
 </resources>

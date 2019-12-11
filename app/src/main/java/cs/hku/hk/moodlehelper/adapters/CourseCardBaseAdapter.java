@@ -8,8 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.net.MalformedURLException;
@@ -20,18 +22,25 @@ import java.util.Map;
 
 import cs.hku.hk.moodlehelper.R;
 
-public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSettingCardAdapter.ViewHolder>
+/**
+ * Adapter for the recycler view in the setting activity
+ */
+public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAdapter.ViewHolder>
 {
-    private ItemClickListener mClickListener;
-    private LayoutInflater mInflater;
-    private View rootView;
-    private List<Course> courses;
+    ItemClickListener mClickListener;
+    LayoutInflater mInflater;
+    View rootView;
+    List<Course> courses;
 
-    public CourseSettingCardAdapter(View root)
+    /**
+     * Constructor for the CourseCardBaseAdapter
+     *
+     * @param root The root view where the recycler view is located in
+     */
+    public CourseCardBaseAdapter(View root)
     {
         mInflater = LayoutInflater.from(root.getContext());
         rootView = root;
-        SharedPreferences sp = root.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
 
         courses = new ArrayList<>();
     }
@@ -48,14 +57,11 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        TextView courseName = rootView.findViewById(R.id.course_setting_name);
-        TextView courseId = rootView.findViewById(R.id.course_setting_id);
-
         String tempURLStr = courses.get(position).courseURL.toString();
         int idStart = tempURLStr.indexOf("id=");
 
-        courseName.setText(courses.get(position).courseName);
-        courseId.setText(tempURLStr.substring(idStart));
+        holder.courseName.setText(courses.get(position).courseName);
+        holder.courseId.setText(tempURLStr.substring(idStart));
     }
 
     @Override
@@ -64,7 +70,7 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
         return courses.size();
     }
 
-    private void aleartNoCourses()
+    private void alertNoCourses()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
         builder.setTitle(R.string.no_course);
@@ -81,15 +87,43 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
     }
 
     /**
-     * This class bind the onItemClick method defined in CourseSettingCardAdapter.ItemClickListener
+     * This class bind the onItemClick method defined in CourseCardBaseAdapter.ItemClickListener
      *   with the card view.
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
+        TextView courseName;
+        TextView courseId;
+
+        /**
+         * Constructor for the view holder, binding the view with variables
+         *
+         * @param itemView each card view
+         */
         ViewHolder(View itemView)
         {
             super(itemView);
             itemView.setOnClickListener(this);
+
+            courseName = itemView.findViewById(R.id.course_setting_name);
+            courseId = itemView.findViewById(R.id.course_setting_id);
+        }
+
+        /**
+         * Constructor for the view holder, binding the view with variables,
+         *   The views for the course name and course id are specified.
+         *
+         * @param itemView each card view
+         * @param courseNameId the ResID to the view of course name within the card
+         * @param courseIdId the ResID to the view of course id within the card
+         */
+        ViewHolder(View itemView, int courseNameId, int courseIdId)
+        {
+            super(itemView);
+            itemView.setOnClickListener(this);
+
+            courseName = itemView.findViewById(courseNameId);
+            courseId = itemView.findViewById(courseIdId);
         }
 
         @Override
@@ -124,7 +158,10 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
         void onItemClick(View view, String name);
     }
 
-    private class Course
+    /**
+     * Abstraction for each course. Converting course url string into URL
+     */
+    protected class Course
     {
         String courseName;
         URL courseURL;
@@ -138,11 +175,15 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
             }
             catch (MalformedURLException e)
             {
+                Toast.makeText(rootView.getContext(),R.string.wrong_url,Toast.LENGTH_SHORT).show();
                 mClickListener.onItemClick(rootView, courseName);
             }
         }
     }
 
+    /**
+     * Update the course list. The caller should also invoke the notify-data-set method explicitly.
+     */
     public void refreshCourseList()
     {
         SharedPreferences sp = rootView.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
@@ -169,12 +210,24 @@ public class CourseSettingCardAdapter extends RecyclerView.Adapter<CourseSetting
             }
             else
             {
-                aleartNoCourses();
+                alertNoCourses();
             }
         }
         else
         {
-            aleartNoCourses();
+            alertNoCourses();
         }
+    }
+
+    public @Nullable URL getURLByCourseName(String courseName)
+    {
+        for(Course each : courses)
+        {
+            if(each.courseName.equals(courseName))
+            {
+                return each.courseURL;
+            }
+        }
+        return null;
     }
 }
