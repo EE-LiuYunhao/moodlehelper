@@ -14,13 +14,12 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
 import android.widget.Toast;
-
-import java.io.FileNotFoundException;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -30,6 +29,7 @@ public class MoodleDownloadListener implements DownloadListener
     private View rootView;
     private ProgressDialog progressDialog;
     private DownloadCompleteReceiver receiver;
+    private LongSparseArray<String> fileCollection;
 
     public MoodleDownloadListener(View rootView)
     {
@@ -40,6 +40,7 @@ public class MoodleDownloadListener implements DownloadListener
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         root.registerReceiver(receiver, intentFilter);
+        fileCollection = new LongSparseArray<>();
     }
 
     public void unregisterReceiver()
@@ -118,6 +119,7 @@ public class MoodleDownloadListener implements DownloadListener
         assert downloadManager != null;
         long downloadId = downloadManager.enqueue(request);
         Log.d("downloadId:{}", downloadId+"");
+        fileCollection.append(downloadId,fileName);
     }
 
     private class DownloadCompleteReceiver extends BroadcastReceiver
@@ -137,23 +139,11 @@ public class MoodleDownloadListener implements DownloadListener
                     vibrator.vibrate(VibrationEffect.createWaveform(pattern,-1));
 
                     long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                    DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-                    assert downloadManager != null;
-                    String type = downloadManager.getMimeTypeForDownloadedFile(downloadId);
 
-                    if (TextUtils.isEmpty(type))
-                    {
-                        type = "*/*";
-                    }
+                    String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/moodle/";
+                    filePath += fileCollection.get(downloadId);
 
-                    Uri uri = downloadManager.getUriForDownloadedFile(downloadId);
-                    if (uri != null)
-                    {
-                        Intent handlerIntent = new Intent(Intent.ACTION_VIEW);
-                        handlerIntent.setDataAndType(uri, type);
-                        Log.d("DEBUG", "URI to the file: "+uri.toString());
-                        context.startActivity(handlerIntent);
-                    }
+                    Toast.makeText(context, context.getString(R.string.file_save_to)+filePath, Toast.LENGTH_LONG).show();
                 }
             }
         }
