@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
-import cs.hku.hk.moodlehelper.adapters.CourseCardButtonAdapter;
+import cs.hku.hk.moodlehelper.supports.CourseCardButtonAdapter;
 
 public class MainActivity extends AppCompatActivity implements CourseCardButtonAdapter.ItemClickListener
 {
