@@ -4,18 +4,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
@@ -27,7 +28,9 @@ public class MoodleContent extends AppCompatActivity
     private String uid;
     private String pin;
     private WebView webView;
+    private ProgressBar bar;
     private WebViewClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -60,6 +63,10 @@ public class MoodleContent extends AppCompatActivity
             }
         });
 
+        bar = findViewById(R.id.progressbar);
+        bar.setMax(100);
+        bar.setVisibility(View.VISIBLE);
+
         webView = findViewById(R.id.webView);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -71,18 +78,39 @@ public class MoodleContent extends AppCompatActivity
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLoadsImagesAutomatically(true);
         settings.setDefaultTextEncodingName("utf-8");
-        webView.canGoForward();
-        webView.canGoBack();
         webView.setWebChromeClient(new WebChromeClient()
         {
             @Override
             public void onProgressChanged(WebView view, int newProgress)
             {
-                ProgressBar bar = findViewById(R.id.progressbar);
                 if(newProgress<100)
                 {
                     bar.setProgress(newProgress);
                 }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
+        webView.setWebViewClient(new WebViewClient()
+        {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request)
+            {
+                view.loadUrl(request.getUrl().toString());
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon)
+            {
+                super.onPageStarted(view, url, favicon);
+                bar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url)
+            {
+                super.onPageFinished(view, url);
+                bar.setVisibility(View.GONE);
             }
         });
     }
@@ -91,12 +119,50 @@ public class MoodleContent extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
-
-        //DEBUG only
-        String builder = "DEBUG USERNAME:[" + uid + "] PASSWORD:[" + pin + ']' +
-                '\n' + courseURL;
-        Toast.makeText(this,"DEBUG: "+ builder,Toast.LENGTH_SHORT).show();
         webView.loadUrl(courseURL.toString());
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        webView.onPause();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        webView.onResume();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        webView.pauseTimers();
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        webView.resumeTimers();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        if (webView != null)
+        {
+            webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
+            webView.clearHistory();
+
+            ((ViewGroup) webView.getParent()).removeView(webView);
+            webView.destroy();
+            webView = null;
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -106,7 +172,11 @@ public class MoodleContent extends AppCompatActivity
         {
             //TODO: if current URL == income, cannot go back
             webView.goBack();
+            return true;
         }
-        return super.onKeyDown(keyCode, event);
+        else
+        {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }

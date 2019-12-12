@@ -51,7 +51,7 @@
             android:backgroundTint="@color/colorPrimaryShadow"
             android:elevation="5dp"
             android:textFontWeight="500"
-            android:textSize="17sp"
+            android:textSize="12sp"
             android:padding="15dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

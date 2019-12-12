@@ -9,4 +9,5 @@
     <color name="colorBackground">#f5eede</color>
     <color name="colorText">#000000</color>
     <color name="transparent_background">#60000000</color>
+    <color name="progress_foreground">#FF0066</color>
 </resources>
