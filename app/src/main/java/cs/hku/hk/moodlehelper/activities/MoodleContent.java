@@ -20,10 +20,10 @@ import android.widget.TextView;
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
+import cs.hku.hk.moodlehelper.supports.MoodleDownloadListener;
 
 public class MoodleContent extends AppCompatActivity
 {
-    private String courseName;
     private URL courseURL;
     private String uid;
     private String pin;
@@ -35,6 +35,8 @@ public class MoodleContent extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        String courseName;
+
         setContentView(R.layout.activity_moodlecontent);
 
         Intent intent = getIntent();
@@ -113,6 +115,7 @@ public class MoodleContent extends AppCompatActivity
                 bar.setVisibility(View.GONE);
             }
         });
+        webView.setDownloadListener(new MoodleDownloadListener(webView));
     }
 
     @Override
@@ -170,7 +173,6 @@ public class MoodleContent extends AppCompatActivity
     {
         if(keyCode==KeyEvent.KEYCODE_BACK && webView.canGoBack())
         {
-            //TODO: if current URL == income, cannot go back
             webView.goBack();
             return true;
         }

@@ -1,4 +1,4 @@
-package cs.hku.hk.moodlehelper.adapters;
+package cs.hku.hk.moodlehelper.supports;
 
 import android.content.Context;
 import android.content.SharedPreferences;

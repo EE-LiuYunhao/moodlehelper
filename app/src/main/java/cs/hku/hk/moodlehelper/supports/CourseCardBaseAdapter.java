@@ -1,4 +1,4 @@
-package cs.hku.hk.moodlehelper.adapters;
+package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
 import android.content.Context;

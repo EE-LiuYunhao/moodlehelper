@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import cs.hku.hk.moodlehelper.R;
-import cs.hku.hk.moodlehelper.adapters.CourseCardBaseAdapter;
+import cs.hku.hk.moodlehelper.supports.CourseCardBaseAdapter;
 
 public class SettingsActivity extends AppCompatActivity implements CourseCardBaseAdapter.ItemClickListener
 {

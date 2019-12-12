@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:max="100"
-        android:progress="0"
+        android:progress="50"
         android:visibility="visible"
         android:progressTint="@color/progress_foreground"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,10 +44,10 @@
         android:id="@+id/webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settingsActivityToolBar" />
+        app:layout_constraintTop_toTopOf="@id/progressbar" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
