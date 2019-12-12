@@ -29,7 +29,7 @@ public class MoodleContent extends AppCompatActivity
     private String pin;
     private WebView webView;
     private ProgressBar bar;
-    private WebViewClient client;
+    MoodleDownloadListener mListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -115,7 +115,8 @@ public class MoodleContent extends AppCompatActivity
                 bar.setVisibility(View.GONE);
             }
         });
-        webView.setDownloadListener(new MoodleDownloadListener(webView));
+        mListener = new MoodleDownloadListener(webView);
+        webView.setDownloadListener(mListener);
     }
 
     @Override
@@ -144,6 +145,7 @@ public class MoodleContent extends AppCompatActivity
     {
         super.onStop();
         webView.pauseTimers();
+        mListener.unregisterReceiver();
     }
 
     @Override

@@ -10,11 +10,17 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -23,16 +29,24 @@ public class MoodleDownloadListener implements DownloadListener
     private Context root;
     private View rootView;
     private ProgressDialog progressDialog;
+    private DownloadCompleteReceiver receiver;
+
     public MoodleDownloadListener(View rootView)
     {
         this.rootView = rootView;
         root = rootView.getContext();
 
-        DownloadCompleteReceiver receiver = new DownloadCompleteReceiver();
+        receiver = new DownloadCompleteReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
         root.registerReceiver(receiver, intentFilter);
     }
+
+    public void unregisterReceiver()
+    {
+        root.unregisterReceiver(receiver);
+    }
+
 
     @Override
     public void onDownloadStart(String url,
@@ -80,6 +94,8 @@ public class MoodleDownloadListener implements DownloadListener
         //specifying the download URL
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
 
+        String cookies = CookieManager.getInstance().getCookie(url);
+        request.addRequestHeader("cookie",cookies);
         request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDescription(root.getString(R.string.download_prompt));
@@ -114,8 +130,13 @@ public class MoodleDownloadListener implements DownloadListener
                 if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(intent.getAction()))
                 {
                     progressDialog.dismiss();
-                    long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 
+                    long [] pattern = {100,100};
+                    Vibrator vibrator = (Vibrator)root.getSystemService(Context.VIBRATOR_SERVICE);
+                    assert vibrator != null;
+                    vibrator.vibrate(VibrationEffect.createWaveform(pattern,-1));
+
+                    long downloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                     DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
                     assert downloadManager != null;
                     String type = downloadManager.getMimeTypeForDownloadedFile(downloadId);
@@ -130,6 +151,7 @@ public class MoodleDownloadListener implements DownloadListener
                     {
                         Intent handlerIntent = new Intent(Intent.ACTION_VIEW);
                         handlerIntent.setDataAndType(uri, type);
+                        Log.d("DEBUG", "URI to the file: "+uri.toString());
                         context.startActivity(handlerIntent);
                     }
                 }
