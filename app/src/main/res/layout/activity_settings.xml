@@ -32,7 +32,7 @@
         android:id="@+id/enter_uid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="29dp"
         android:text="@string/prompt_uid"
         android:textColor="@color/colorText"
@@ -45,7 +45,7 @@
         android:id="@+id/enter_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="29dp"
         android:text="@string/prompt_password"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,13 +58,14 @@
         android:id="@+id/uid_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="7"
-        android:inputType="textPersonName"
         android:autofillHints="@string/initial_uid"
+        android:ems="7"
         android:hint="@string/initial_uid"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enter_uid"
-        app:layout_constraintTop_toTopOf="@+id/enter_uid" />
+        app:layout_constraintTop_toTopOf="@+id/enter_uid"
+        app:layout_constraintBottom_toBottomOf="@+id/enter_uid" />
 
     <EditText
         android:id="@+id/pin_value"
@@ -76,16 +77,10 @@
         android:hint="@string/initial_pin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/enter_pin"
-        app:layout_constraintTop_toTopOf="@id/enter_pin"/>
+        app:layout_constraintTop_toTopOf="@id/enter_pin"
+        app:layout_constraintBottom_toBottomOf="@id/enter_pin"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/courses_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -101,5 +96,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_add_24dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_value">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/courses_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="35dp" />
+
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
