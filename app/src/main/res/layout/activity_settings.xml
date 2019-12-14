@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingsActivity">
+    tools:context=".activities.SettingsActivity"
+    android:id="@+id/root_setting_view">
 
 
     <androidx.appcompat.widget.Toolbar
@@ -22,7 +23,7 @@
             android:text="@string/action_settings"
             android:textColor="@color/colorBackground"
             android:textFontWeight="800"
-            android:textSize="25sp"
+            android:textSize="17sp"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"/>
     </androidx.appcompat.widget.Toolbar>
@@ -31,12 +32,12 @@
         android:id="@+id/enter_uid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="29dp"
         android:text="@string/prompt_uid"
         android:textColor="@color/colorText"
         android:textFontWeight="600"
-        android:textSize="20sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsActivityToolBar" />
 
@@ -44,46 +45,42 @@
         android:id="@+id/enter_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="29dp"
         android:text="@string/prompt_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_uid"
         android:textColor="@color/colorText"
         android:textFontWeight="600"
-        android:textSize="20sp"/>
+        android:textSize="15sp"/>
 
     <EditText
         android:id="@+id/uid_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
         android:autofillHints="@string/initial_uid"
+        android:ems="7"
         android:hint="@string/initial_uid"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/enter_uid"
-        app:layout_constraintTop_toTopOf="@+id/enter_uid" />
+        app:layout_constraintTop_toTopOf="@+id/enter_uid"
+        app:layout_constraintBottom_toBottomOf="@+id/enter_uid" />
 
     <EditText
         android:id="@+id/pin_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="10"
+        android:ems="7"
         android:inputType="textPassword"
         android:autofillHints="@string/initial_pin"
         android:hint="@string/initial_pin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/enter_pin"
-        app:layout_constraintTop_toTopOf="@id/enter_pin"/>
+        app:layout_constraintTop_toTopOf="@id/enter_pin"
+        app:layout_constraintBottom_toBottomOf="@id/enter_pin"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -99,5 +96,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_add_24dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/courses_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            app:layout_constraintTop_toBottomOf="@id/pin_value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

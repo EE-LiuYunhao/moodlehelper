@@ -1,33 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="150dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/colorBackground"
     android:elevation="3dp"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp"
+    android:layout_marginBottom="15dp">
 
-    <TextView
-        android:id="@+id/couseTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:textColor="@color/colorText"
-        android:textSize="17sp"
-        android:textFontWeight="600"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="75dp"
-        android:layout_marginStart="70dp"
-        android:text="@string/click_to_course"
-        android:backgroundTint="@color/colorPrimaryShadow"
-        android:elevation="5dp"
-        android:textFontWeight="500"
-        android:textSize="17sp"
-        android:padding="15dp"/>
+        <TextView
+            android:id="@+id/courseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/colorText"
+            android:textSize="17sp"
+            android:textFontWeight="600"/>
+
+        <TextView
+            android:id="@+id/courseId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/colorSelfDefinedHint"
+            android:textFontWeight="600"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.3"
+            app:layout_constraintStart_toEndOf="@id/courseTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/course_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/courseTitle"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="70dp"
+            android:text="@string/click_to_course"
+            android:backgroundTint="@color/colorPrimaryShadow"
+            android:elevation="5dp"
+            android:textFontWeight="500"
+            android:textSize="12sp"
+            android:padding="15dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
