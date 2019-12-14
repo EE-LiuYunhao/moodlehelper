@@ -25,7 +25,8 @@ Using the APP, you can
  
 ## How to install
 
-The APK file are included in the RELEASE. Go to the RELEASE and you can download it onto your mobile phones. 
+The APK file are included in the *RELEASE*. Go to the *RELEASE* tab and you can download it onto your mobile
+phones. 
 
 ### Requirements for devices: 
 1. Android Devices
@@ -36,9 +37,9 @@ The APK file are included in the RELEASE. Go to the RELEASE and you can download
 
 Open the repo in Android Studio. 
 
-The Java codes are located in `./app/src/main/java/src/main/java/cs/hku/hk//moodlehelper/`. 
+The source codes are located in `./app/src/main/java/src/main/java/cs/hku/hk//moodlehelper/`. 
 
-There exist **TWO** packages. **activities**  contains all the JAVA codes for each activities and 
+There exist **TWO** packages. **activities**  contains the JAVA files for activities and 
 **support** contains those for adapters, customized listeners and etc. 
 
 Resources file are in `./app/src/main/java/src/main/res`, includes the drawables, javascripts which
