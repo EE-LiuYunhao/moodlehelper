@@ -19,7 +19,6 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -56,7 +55,15 @@ public class MoodleDownloadListener implements DownloadListener
 
     public void unregisterReceiver()
     {
-        root.unregisterReceiver(receiver);
+        try
+        {
+            root.unregisterReceiver(receiver);
+        }
+        catch(IllegalArgumentException e)
+        {
+            Log.e("Error caught", "Cannot unregister the receiver:\n");
+            e.printStackTrace();
+        }
     }
 
 

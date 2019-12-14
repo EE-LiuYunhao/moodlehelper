@@ -1,6 +1,5 @@
 package cs.hku.hk.moodlehelper.activities;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
@@ -10,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -17,9 +17,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
@@ -33,6 +34,8 @@ public class MoodleContent extends AppCompatActivity
     private WebView webView;
     private ProgressBar bar;
     MoodleDownloadListener mListener;
+
+    private String jstr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,10 +75,11 @@ public class MoodleContent extends AppCompatActivity
         bar.setMax(100);
         bar.setVisibility(View.VISIBLE);
 
+        loadJavaScript();
+
         webView = findViewById(R.id.webView);
         WebSettings settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
-        //TODO: include JS code here
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
         settings.setSupportZoom(false);
@@ -116,6 +120,18 @@ public class MoodleContent extends AppCompatActivity
             {
                 super.onPageFinished(view, url);
                 bar.setVisibility(View.GONE);
+                //evaluate javascript segments
+                webView.evaluateJavascript(jstr, new ValueCallback<String>()
+                {
+                    @Override public void onReceiveValue(String value)
+                    {
+                        Log.d("JS", value);
+                        if(value.equals("\"Success at clearViewElements()\""))
+                        {
+                            webView.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
             }
         });
         mListener = new MoodleDownloadListener(webView,this);
@@ -185,5 +201,36 @@ public class MoodleContent extends AppCompatActivity
         {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    /**
+     * load JavaScript as jstr
+     * @see <a href=https://blog.csdn.net/yyanjun/article/details/80353766>Reference</a> The article provides a clear guidance.
+     */
+    private void loadJavaScript()
+    {
+        try
+        {
+            InputStream in = getAssets().open("assist.js");
+            byte[] buff = new byte[1024];
+            ByteArrayOutputStream fromFile = new ByteArrayOutputStream();
+            do
+            {
+                int numRead = in.read(buff);
+                if (numRead <= 0)
+                {
+                    break;
+                }
+                fromFile.write(buff, 0, numRead);
+            } while (true);
+            jstr = fromFile.toString();
+            in.close();
+            fromFile.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        jstr += "switchURL(\""+uid+"\", \""+pin+"\"); ";
     }
 }
