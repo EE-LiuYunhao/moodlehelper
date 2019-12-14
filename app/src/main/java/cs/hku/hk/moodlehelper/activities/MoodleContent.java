@@ -1,8 +1,8 @@
 package cs.hku.hk.moodlehelper.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
@@ -115,7 +118,7 @@ public class MoodleContent extends AppCompatActivity
                 bar.setVisibility(View.GONE);
             }
         });
-        mListener = new MoodleDownloadListener(webView);
+        mListener = new MoodleDownloadListener(webView,this);
         webView.setDownloadListener(mListener);
     }
 
