@@ -1,9 +1,14 @@
 package cs.hku.hk.moodlehelper.activities;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,6 +39,8 @@ public class MoodleContent extends AppCompatActivity
     private WebView webView;
     private ProgressBar bar;
     MoodleDownloadListener mListener;
+    private ValueCallback<Uri[]> uploadMessages=null;
+    private final int FILE_CHOOSE_RESULT_CODE = 11115;
 
     private String jstr;
 
@@ -97,6 +104,32 @@ public class MoodleContent extends AppCompatActivity
                     bar.setProgress(newProgress);
                 }
                 super.onProgressChanged(view, newProgress);
+            }
+
+            @Override
+            public boolean onShowFileChooser(WebView webView,
+                                             ValueCallback<Uri[]> filePathCallback,
+                                             FileChooserParams fileChooserParams)
+            {
+
+                // make sure there is no existing message
+                if (uploadMessages != null)
+                {
+                    uploadMessages.onReceiveValue(null);
+                    uploadMessages = null;
+                }
+                uploadMessages = filePathCallback;
+                Intent fileChooser = fileChooserParams.createIntent();
+                try
+                {
+                    startActivityForResult(fileChooser, FILE_CHOOSE_RESULT_CODE);
+                }
+                catch (ActivityNotFoundException e)
+                {
+                    uploadMessages = null;
+                    return false;
+                }
+                return true;
             }
         });
         webView.setWebViewClient(new WebViewClient()
@@ -201,6 +234,39 @@ public class MoodleContent extends AppCompatActivity
         {
             return super.onKeyDown(keyCode, event);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        //handle the file chooser result for uploading
+        if(resultCode==FILE_CHOOSE_RESULT_CODE)
+        {
+            if(data!=null && uploadMessages!=null)
+            {
+                String dataStr = data.getDataString();
+                ClipData clipData = data.getClipData();
+                Uri [] results;
+                if(dataStr!=null && !dataStr.equals(""))
+                {
+                    results = new Uri[] { Uri.parse(dataStr)};
+                }
+                else if (clipData!=null)
+                {
+                    results = new Uri[clipData.getItemCount()];
+                    for(int i=0; i<clipData.getItemCount(); i++)
+                        results[i] = clipData.getItemAt(i).getUri();
+                }
+                else
+                    results=null;
+                if(results!=null)
+                    uploadMessages.onReceiveValue(results);
+                uploadMessages = null;
+            }
+            //else do nothing
+        }
+        else
+            super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
