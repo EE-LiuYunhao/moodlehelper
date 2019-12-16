@@ -26,7 +26,9 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.MoodleDownloadListener;
@@ -48,7 +50,7 @@ public class MoodleContent extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        String courseName;
+        final String courseName;
 
         setContentView(R.layout.activity_moodlecontent);
 
@@ -169,13 +171,14 @@ public class MoodleContent extends AppCompatActivity
         });
         mListener = new MoodleDownloadListener(webView,this);
         webView.setDownloadListener(mListener);
+
+        webView.loadUrl(courseURL.toString());
     }
 
     @Override
     protected void onStart()
     {
         super.onStart();
-        webView.loadUrl(courseURL.toString());
     }
 
     @Override
@@ -197,7 +200,7 @@ public class MoodleContent extends AppCompatActivity
     {
         super.onStop();
         webView.pauseTimers();
-        mListener.unregisterReceiver();
+
     }
 
     @Override
@@ -219,6 +222,8 @@ public class MoodleContent extends AppCompatActivity
             webView.destroy();
             webView = null;
         }
+        if(mListener != null)
+            mListener.unregisterReceiver();
         super.onDestroy();
     }
 
@@ -240,7 +245,7 @@ public class MoodleContent extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         //handle the file chooser result for uploading
-        if(resultCode==FILE_CHOOSE_RESULT_CODE)
+        if(requestCode==FILE_CHOOSE_RESULT_CODE)
         {
             if(data!=null && uploadMessages!=null)
             {
@@ -261,6 +266,7 @@ public class MoodleContent extends AppCompatActivity
                     results=null;
                 if(results!=null)
                     uploadMessages.onReceiveValue(results);
+                Log.d("FileUpload", "onActivityResult: "+ (results != null ? Arrays.toString(results) : null));
                 uploadMessages = null;
             }
             //else do nothing

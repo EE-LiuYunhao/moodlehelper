@@ -31,7 +31,9 @@ function enterUIDandPINandClick(username, password)
         userNameField.value = username;
     if(passwordField!==null && password!==null && password!=="")
         passwordField.value = password;
-    document.getElementsByName("form")[0].submit();
+    var form2submit = document.getElementsByName("form")[0]
+    if(form2submit!==null)
+        form2submit.submit();
     return "Success are enterUIDandPINandClick(\""+username+"\",\""+password+"\")";
 }
 
@@ -49,13 +51,26 @@ function clearViewElements()
         eachHeader.style.display='none';
     }
 
-    document.getElementById("page-header").style.display='none';
+    var header = document.getElementById("page-header");
+    if (header!== null)
+        header.style.display='none';
 
-    document.getElementById("page-navbar").style.display='none';
+    var navbar = document.getElementById("page-navbar");
+    if(navbar!==null)
+        navbar.style.display='none';
 
-    document.getElementById("completionprogressid").style.display='none';
+    var progress = document.getElementById("completionprogressid");
+    if(progress!==null)
+        progress.style.display='none';
 
-    document.getElementById("dock").style.display='none';
+    var dock = document.getElementById("dock");
+    if(dock!==null)
+        dock.style.display='none';
+
+    var page = document.getElementById("page");
+    if(page!==null)
+        page.style.paddingLeft = "20px";
+
     return "Success at clearViewElements()";
 }
 

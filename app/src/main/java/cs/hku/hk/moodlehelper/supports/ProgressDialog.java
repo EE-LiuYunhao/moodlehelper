@@ -1,6 +1,3 @@
-/**
- * This is for showing a dialog to user when a background connection is in progress
- */
 package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
@@ -9,16 +6,20 @@ import android.widget.TextView;
 
 import cs.hku.hk.moodlehelper.R;
 
+/**
+ * This is for showing a dialog to user when a background connection is in progress
+ */
 public class ProgressDialog
 {
     private AlertDialog alertDialog;
     private View rootView;
+    private long timeOfDraw;
 
     /**
      * Constructor, to build a ProcessingDialog instance for further usage
      * @param rootView The view a processing dialog should be bound to
      */
-    public ProgressDialog(View rootView)
+    ProgressDialog(View rootView)
     {
         this.rootView = rootView;
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
@@ -45,18 +46,34 @@ public class ProgressDialog
     /**
      * Display the dialog in the context
      */
-    public void show()
+    void show()
     {
         alertDialog.setCancelable(false);
         alertDialog.show();
+        timeOfDraw = System.currentTimeMillis();
+        rootView.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                while(true)
+                {
+                    if(System.currentTimeMillis()-timeOfDraw>=6000)
+                        break;
+                }
+                if(alertDialog.isShowing())
+                    alertDialog.cancel();
+            }
+        });
     }
 
     /**
      * Dismiss the dialog
      */
-    public void dismiss()
+    void dismiss()
     {
-        alertDialog.cancel();
+        if(alertDialog.isShowing())
+            alertDialog.cancel();
     }
 
 }
