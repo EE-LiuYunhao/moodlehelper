@@ -148,6 +148,7 @@ public class MoodleContent extends AppCompatActivity
             {
                 super.onPageStarted(view, url, favicon);
                 bar.setVisibility(View.VISIBLE);
+                webView.setVisibility(View.GONE);
             }
 
             @Override
@@ -230,7 +231,7 @@ public class MoodleContent extends AppCompatActivity
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        if(keyCode==KeyEvent.KEYCODE_BACK && webView.canGoBack())
+        if(keyCode==KeyEvent.KEYCODE_BACK && webView.canGoBack() && ! webView.getUrl().equals(courseURL.toString()))
         {
             webView.goBack();
             return true;
