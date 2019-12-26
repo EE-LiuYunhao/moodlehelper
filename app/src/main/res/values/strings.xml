@@ -6,6 +6,7 @@
     <string name="prompt_password">Portal PIN: </string>
     <string name="initial_uid">HKU Portal Login name</string>
     <string name="initial_pin">HKU Portal Login Password</string>
+    <string name="initial_pin_unchanged">Portal PIN (Unchanged)</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="click_to_course">Click to Enter the Course</string>
     <string name="prompt_enter_course_name">Course Name: </string>
@@ -20,4 +21,6 @@
     <string name="download_prompt">Downloading file from Moodle</string>
     <string name="no_download_permission">Cannot download due to no download permission</string>
     <string name="file_save_to">File has been saved to: \n</string>
+    <string name="prompt_course_title">Course Title:</string>
+    <string name="example_course_title">Introduction to Campus Life</string>
 </resources>

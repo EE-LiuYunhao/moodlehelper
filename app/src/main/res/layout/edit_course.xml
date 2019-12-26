@@ -28,6 +28,25 @@
         android:textColor="@color/colorText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/prompt_course_title" />
+
+    <EditText
+        android:layout_marginStart="10dp"
+        android:id="@+id/edit_course_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textUri"
+        android:autofillHints="@string/prompt_course_title"
+        android:hint="@string/example_course_title"/>
+
+    <TextView
+        android:layout_marginStart="5dp"
+        android:textSize="17sp"
+        android:layout_marginTop="7dp"
+        android:textColor="@color/colorText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/prompt_enter_course_url" />
 
     <EditText
