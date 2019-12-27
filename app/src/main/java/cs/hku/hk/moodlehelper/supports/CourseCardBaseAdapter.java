@@ -171,7 +171,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         Course(String courseName, String courseTitle, String urlStr)
         {
             this.courseName = courseName;
-            this.courseTitle = courseTitle;
+            this.courseTitle = courseTitle.equals("")?rootView.getContext().getString(R.string.empty_course_title):courseTitle;
             try
             {
                 this.courseURL = new URL(urlStr);
@@ -209,7 +209,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),"DEFAULT COURSE TITLE"),courseUrlStr));
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
                 }
             }
             else

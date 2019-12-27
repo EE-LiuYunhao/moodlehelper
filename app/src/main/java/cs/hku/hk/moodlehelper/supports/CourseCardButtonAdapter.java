@@ -98,7 +98,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),"DEFAULT COURSE TITLE"),courseUrlStr));
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
                 }
             }
             else
