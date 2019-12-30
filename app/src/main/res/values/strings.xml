@@ -22,6 +22,6 @@
     <string name="no_download_permission">Cannot download due to no download permission</string>
     <string name="file_save_to">File has been saved to: \n</string>
     <string name="prompt_course_title">Course Title:</string>
-    <string name="example_course_title">Introduction to Campus Life</string>
+    <string name="example_course_title">e.g. Introduction to Campus Life</string>
     <string name="empty_course_title">DEFAULT COURSE TITLE</string>
 </resources>
