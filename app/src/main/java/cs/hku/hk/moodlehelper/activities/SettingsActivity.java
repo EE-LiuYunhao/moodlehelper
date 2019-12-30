@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
         }
         if(!storedPIN.equals(""))
         {
-            mUID.setText(R.string.initial_pin_unchanged);
+            mPIN.setHint(R.string.initial_pin_unchanged);
         }
     }
 
