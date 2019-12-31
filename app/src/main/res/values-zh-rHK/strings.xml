@@ -24,4 +24,6 @@
     <string name="prompt_course_title">課程名稱</string>
     <string name="example_course_title">例如：微積分</string>
     <string name="empty_course_title">【默認課程】</string>
+    <string name="language">語言：繁體中文</string>
+    <string name="language_hint">與系統語言設置一致</string>
 </resources>

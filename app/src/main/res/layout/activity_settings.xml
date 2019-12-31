@@ -32,11 +32,11 @@
         android:id="@+id/enter_uid"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="29dp"
         android:text="@string/prompt_uid"
         android:textColor="@color/colorText"
-        android:textFontWeight="600"
+        android:textFontWeight="500"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/settingsActivityToolBar" />
@@ -45,13 +45,13 @@
         android:id="@+id/enter_pin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="29dp"
         android:text="@string/prompt_password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/enter_uid"
         android:textColor="@color/colorText"
-        android:textFontWeight="600"
+        android:textFontWeight="500"
         android:textSize="15sp"/>
 
     <EditText
@@ -81,31 +81,55 @@
         app:layout_constraintBottom_toBottomOf="@id/enter_pin"/>
 
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/courses_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/language" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:elevation="3dp"
-        app:rippleColor="@color/colorPrimaryShadow"
-        app:pressedTranslationZ="6dp"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
+        android:elevation="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:pressedTranslationZ="6dp"
+        app:rippleColor="@color/colorPrimaryShadow"
         app:srcCompat="@drawable/ic_add_24dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/courses_list"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            app:layout_constraintTop_toBottomOf="@id/pin_value"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="0dp"
+        android:text="@string/language"
+        android:textColor="@color/colorText"
+        android:textSize="15sp"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
+
+    <TextView
+        android:id="@+id/language_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:text="@string/language_hint"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/language"
+        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
