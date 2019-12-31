@@ -41,11 +41,8 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     @Override
     public void onBindViewHolder(@NonNull CourseCardBaseAdapter.ViewHolder holder, int position)
     {
-        String tempURLStr = courses.get(position).courseURL.toString();
-        int idStart = tempURLStr.indexOf("id=");
-
         holder.courseName.setText(courses.get(position).courseName);
-        holder.courseId.setText(tempURLStr.substring(idStart));
+        holder.courseId.setText(courses.get(position).courseTitle);
     }
 
     /**
@@ -82,6 +79,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     public void refreshCourseList()
     {
         SharedPreferences sp = rootView.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
+        SharedPreferences titles = rootView.getContext().getSharedPreferences("names", Context.MODE_PRIVATE);
         courses.clear();
 
         if(sp != null)
@@ -100,7 +98,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(),courseUrlStr));
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
                 }
             }
             else

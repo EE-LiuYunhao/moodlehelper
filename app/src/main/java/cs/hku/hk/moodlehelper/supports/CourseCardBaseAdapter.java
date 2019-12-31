@@ -59,8 +59,9 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     {
         String tempURLStr = courses.get(position).courseURL.toString();
         int idStart = tempURLStr.indexOf("id=");
+        String tempCourseName = courses.get(position).courseName + ": " + courses.get(position).courseTitle;
 
-        holder.courseName.setText(courses.get(position).courseName);
+        holder.courseName.setText(tempCourseName);
         holder.courseId.setText(tempURLStr.substring(idStart));
     }
 
@@ -161,14 +162,16 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     /**
      * Abstraction for each course. Converting course url string into URL
      */
-    protected class Course
+    class Course
     {
         String courseName;
         URL courseURL;
+        String courseTitle;
 
-        Course(String courseName, String urlStr)
+        Course(String courseName, String courseTitle, String urlStr)
         {
             this.courseName = courseName;
+            this.courseTitle = courseTitle.equals("") || courseTitle.matches("[\t ]*")?rootView.getContext().getString(R.string.empty_course_title):courseTitle;
             try
             {
                 this.courseURL = new URL(urlStr);
@@ -187,6 +190,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     public void refreshCourseList()
     {
         SharedPreferences sp = rootView.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
+        SharedPreferences titles = rootView.getContext().getSharedPreferences("names", Context.MODE_PRIVATE);
         courses.clear();
 
         if(sp != null)
@@ -205,7 +209,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(),courseUrlStr));
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
                 }
             }
             else

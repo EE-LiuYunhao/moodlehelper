@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Moodle助手</string>
+    <string name="action_settings">設置</string>
+    <string name="invalid_button">程式出錯。請重試</string>
+    <string name="prompt_uid">Portal用戶名</string>
+    <string name="prompt_password">Portal密碼</string>
+    <string name="initial_uid">UID</string>
+    <string name="initial_pin">PIN</string>
+    <string name="initial_pin_unchanged">密碼（未更改）</string>
+    <string name="title_activity_settings">設置</string>
+    <string name="click_to_course">瀏覽課程資源</string>
+    <string name="prompt_enter_course_name">課程編號</string>
+    <string name="prompt_enter_course_url">課程網址</string>
+    <string name="example_course_name">如：HKUH1005</string>
+    <string name="example_course_url">如：https://moodle.hku.hk/php?id=133355</string>
+    <string name="confirm">確認</string>
+    <string name="cancel">取消</string>
+    <string name="no_course">未有儲存任何課程</string>
+    <string name="wrong_url">不能解析網址。請檢查。</string>
+    <string name="delete_course_setting">移除</string>
+    <string name="download_prompt">正在下載資源</string>
+    <string name="no_download_permission">未給予此程式儲存權限，不能下載</string>
+    <string name="file_save_to">文件被下載至：\n</string>
+    <string name="prompt_course_title">課程名稱</string>
+    <string name="example_course_title">例如：微積分</string>
+    <string name="empty_course_title">【默認課程】</string>
+</resources>

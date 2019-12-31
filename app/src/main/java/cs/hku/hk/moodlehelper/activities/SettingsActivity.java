@@ -70,14 +70,22 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
                             {
                                 final EditText courseName = addCourseView.findViewById(R.id.edit_course_name);
                                 final EditText courseUrl = addCourseView.findViewById(R.id.edit_course_url);
+                                final EditText courseTitle = addCourseView.findViewById(R.id.edit_course_title);
 
                                 String courseNameStr = courseName.getText().toString();
                                 String courseUrlStr = courseUrl.getText().toString();
+                                String courseTitleStr = courseTitle.getText().toString();
 
                                 SharedPreferences sharedPreferences = getSharedPreferences("courses", MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putString(courseNameStr,courseUrlStr);
                                 editor.apply();
+
+                                sharedPreferences = getSharedPreferences("names", MODE_PRIVATE);
+                                editor = sharedPreferences.edit();
+                                editor.putString(courseNameStr,courseTitleStr);
+                                editor.apply();
+
                                 mAdapter.refreshCourseList();
                                 mAdapter.notifyDataSetChanged();
                             }
@@ -114,10 +122,15 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
 
         SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
         String storedUID = sp.getString("portalID", "");
+        String storedPIN = sp.getString("portalPIN", "");
 
         if(!storedUID.equals(""))
         {
             mUID.setText(storedUID);
+        }
+        if(!storedPIN.equals(""))
+        {
+            mPIN.setHint(R.string.initial_pin_unchanged);
         }
     }
 
@@ -153,12 +166,17 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
 
         final EditText courseName = addCourseView.findViewById(R.id.edit_course_name);
         final EditText courseUrl = addCourseView.findViewById(R.id.edit_course_url);
-        final SharedPreferences sharedPreferences = getSharedPreferences("courses", MODE_PRIVATE);
-        final String urlStr = sharedPreferences.getString(name,getString(R.string.example_course_url));
+        final EditText courseTitle = addCourseView.findViewById(R.id.edit_course_title);
+        final SharedPreferences courseUrls = getSharedPreferences("courses", MODE_PRIVATE);
+        final SharedPreferences courseTitles = getSharedPreferences("names", MODE_PRIVATE);
+        //TODO: use the courseTitles in UI
+        final String urlStr = courseUrls.getString(name,getString(R.string.example_course_url));
+        final String titleStr = courseTitles.getString(name, getString(R.string.example_course_title));
 
         courseName.setText(name);
         courseName.setEnabled(false);
         courseUrl.setText(urlStr);
+        courseTitle.setText(titleStr);
 
         builder.setPositiveButton(R.string.confirm,
                 new DialogInterface.OnClickListener()
@@ -168,10 +186,16 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
                     {
 
                         String courseUrlStr = courseUrl.getText().toString();
+                        String courseTitleStr = courseTitle.getText().toString();
 
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        SharedPreferences.Editor editor = courseUrls.edit();
                         editor.putString(name,courseUrlStr);
                         editor.apply();
+
+                        editor = courseTitles.edit();
+                        editor.putString(name, courseTitleStr);
+                        editor.apply();
+
                         mAdapter.refreshCourseList();
                         mAdapter.notifyDataSetChanged();
                     }
@@ -189,9 +213,14 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        SharedPreferences.Editor editor = courseUrls.edit();
                         editor.remove(name);
                         editor.apply();
+
+                        editor = courseTitles.edit();
+                        editor.remove(name);
+                        editor.apply();
+
                         mAdapter.refreshCourseList();
                         mAdapter.notifyDataSetChanged();
                     }
