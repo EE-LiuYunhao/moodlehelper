@@ -15,6 +15,9 @@ public class ProgressDialog
     private View rootView;
     private long timeOfDraw;
 
+    private ProgressView mProgressView;
+
+
     /**
      * Constructor, to build a ProcessingDialog instance for further usage
      * @param rootView The view a processing dialog should be bound to
@@ -25,6 +28,9 @@ public class ProgressDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
         builder.setView(View.inflate(this.rootView.getContext(), R.layout.progress_dialog,null));
         alertDialog = builder.create();
+
+
+        mProgressView = rootView.findViewById(R.id.progress_view_widget);
     }
 
     /**
@@ -41,6 +47,8 @@ public class ProgressDialog
         textView.setText(resId);
         builder.setView(dialogView);
         alertDialog = builder.create();
+
+        mProgressView = rootView.findViewById(R.id.progress_view_widget);
     }
 
     /**
@@ -50,6 +58,8 @@ public class ProgressDialog
     {
         alertDialog.setCancelable(false);
         alertDialog.show();
+        mProgressView.startAnimation();
+
         timeOfDraw = System.currentTimeMillis();
         rootView.post(new Runnable()
         {
@@ -72,6 +82,8 @@ public class ProgressDialog
      */
     void dismiss()
     {
+        mProgressView.stopAnimation();
+
         if(alertDialog.isShowing())
             alertDialog.cancel();
     }
