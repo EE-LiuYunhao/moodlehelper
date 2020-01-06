@@ -26,5 +26,4 @@
     <string name="empty_course_title">DEFAULT COURSE TITLE</string>
     <string name="language">Language: English (Default)</string>
     <string name="language_hint">Same as system default</string>
-    <string name="title_activity_tester">tester</string>
 </resources>
