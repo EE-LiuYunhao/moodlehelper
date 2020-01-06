@@ -1,8 +1,14 @@
 package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+
+import org.w3c.dom.Text;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -11,11 +17,32 @@ import cs.hku.hk.moodlehelper.R;
  */
 public class ProgressDialog
 {
+    private static final int DIALOG_TIME_OUT=1;
+
     private AlertDialog alertDialog;
     private View rootView;
     private long timeOfDraw;
 
     private ProgressView mProgressView;
+
+    private MyHandler myHandler;
+
+    private static class MyHandler extends android.os.Handler
+    {
+        private ProgressDialog rootDialog;
+
+        MyHandler(ProgressDialog rootDialog)
+        {
+            this.rootDialog = rootDialog;
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg)
+        {
+            if(msg.what == DIALOG_TIME_OUT)
+                rootDialog.dismiss();
+        }
+    }
 
 
     /**
@@ -26,11 +53,13 @@ public class ProgressDialog
     {
         this.rootView = rootView;
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
-        builder.setView(View.inflate(this.rootView.getContext(), R.layout.progress_dialog,null));
+        View dialogView = View.inflate(this.rootView.getContext(), R.layout.progress_dialog, null);
+        builder.setView(dialogView);
         alertDialog = builder.create();
 
 
-        mProgressView = rootView.findViewById(R.id.progress_view_widget);
+        mProgressView = dialogView.findViewById(R.id.progress_view_widget);
+        myHandler = new MyHandler(this);
     }
 
     /**
@@ -48,7 +77,8 @@ public class ProgressDialog
         builder.setView(dialogView);
         alertDialog = builder.create();
 
-        mProgressView = rootView.findViewById(R.id.progress_view_widget);
+        mProgressView = dialogView.findViewById(R.id.progress_view_widget);
+        myHandler = new MyHandler(this);
     }
 
     /**
@@ -61,20 +91,21 @@ public class ProgressDialog
         mProgressView.startAnimation();
 
         timeOfDraw = System.currentTimeMillis();
-        rootView.post(new Runnable()
+
+        final Thread timeCounter = new Thread(new Runnable()
         {
             @Override
             public void run()
             {
                 while(true)
                 {
-                    if(System.currentTimeMillis()-timeOfDraw>=6000)
+                    if(System.currentTimeMillis()-timeOfDraw >= 6000)
                         break;
                 }
-                if(alertDialog.isShowing())
-                    alertDialog.cancel();
+                myHandler.sendEmptyMessage(DIALOG_TIME_OUT);
             }
         });
+        timeCounter.start();
     }
 
     /**

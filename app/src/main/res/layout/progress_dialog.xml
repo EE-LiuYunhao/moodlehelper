@@ -17,8 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:dot_color="@color/colorAccent"
-        app:dot_count="5"
-        app:original_distance="10dp"
+        app:dot_count="6"
+        app:original_distance="20dp"
         app:dot_radius="10dp"/>
 
     <TextView

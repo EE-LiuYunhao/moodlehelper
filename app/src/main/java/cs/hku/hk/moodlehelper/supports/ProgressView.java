@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
@@ -76,9 +77,9 @@ public class ProgressView extends View
     {
         mAnimator = ValueAnimator.ofInt(-1*mOriginalDistance, mOriginalDistance);
 
-        mAnimator.setDuration(4000);
+        mAnimator.setDuration(780);
         mAnimator.setRepeatCount(ValueAnimator.INFINITE);
-        mAnimator.setRepeatMode(ValueAnimator.RESTART);
+        mAnimator.setRepeatMode(ValueAnimator.REVERSE);
         mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.addUpdateListener(new AnimatorUpdateListener()
         {
@@ -115,24 +116,15 @@ public class ProgressView extends View
         {
             for(int i=0; i<mDotCount-2; i+=2)
             {
-                canvas.drawCircle(getWidth()>>1 - (i>>1) * mDotRadius * 2 - mDotRadius,
+                canvas.drawCircle((getWidth()>>1) - (i>>1) * mDotRadius * 2 - mDotRadius,
                                   getHeight()>>1,
                                      mDotRadius,
                                      mPaint);
-                canvas.drawCircle(getWidth()>>1 + (i>>1) * mDotRadius * 2 + mDotRadius,
-                                     getHeight(),
+                canvas.drawCircle((getWidth()>>1) + (i>>1) * mDotRadius * 2 + mDotRadius,
+                                  getHeight()>>1,
                                      mDotRadius,
                                      mPaint);
             }
-            //the leftmost one
-            canvas.drawCircle(getWidth()>>1 - (1+mDotCount)*mDotRadius - (mCurrentDistance<0?mCurrentDistance:0),
-                              getHeight()>>1,
-                                 mDotRadius,
-                                 mPaint);
-            canvas.drawCircle(getWidth()>>1 + (1+mDotCount)*mDotRadius + (mCurrentDistance<0?mCurrentDistance:0),
-                              getHeight()>>1,
-                                 mDotRadius,
-                                 mPaint);
         }
         else
         {
@@ -143,16 +135,26 @@ public class ProgressView extends View
                                  mPaint);
             for(int i=0; i<mDotCount-3; i+=2)
             {
-                canvas.drawCircle(getWidth()>>1 - (i+2)*mDotRadius,
+                canvas.drawCircle((getWidth()>>1) - (i+2)*mDotRadius,
                                   getHeight()>>1,
                                      mDotRadius,
                                      mPaint);
-                canvas.drawCircle(getWidth()>>1 + (i+2)*mDotRadius,
+                canvas.drawCircle((getWidth()>>1) + (i+2)*mDotRadius,
                                   getHeight()>>1,
                                      mDotRadius,
                                      mPaint);
             }
         }
+        //the leftmost one
+        canvas.drawCircle((getWidth()>>1) - (mDotCount-1)*mDotRadius + (mCurrentDistance<0?mCurrentDistance:0),
+                          getHeight()>>1,
+                             mDotRadius,
+                             mPaint);
+        //the rightmost one
+        canvas.drawCircle((getWidth()>>1) + (mDotCount-1)*mDotRadius + (mCurrentDistance>0?mCurrentDistance:0),
+                          getHeight()>>1,
+                             mDotRadius,
+                             mPaint);
     }
 
     @Override
