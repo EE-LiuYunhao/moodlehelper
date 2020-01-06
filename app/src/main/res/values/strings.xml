@@ -24,4 +24,6 @@
     <string name="prompt_course_title">Course Title:</string>
     <string name="example_course_title">e.g. Introduction to Campus Life</string>
     <string name="empty_course_title">DEFAULT COURSE TITLE</string>
+    <string name="language">Language: English (Default)</string>
+    <string name="language_hint">Same as system default</string>
 </resources>
