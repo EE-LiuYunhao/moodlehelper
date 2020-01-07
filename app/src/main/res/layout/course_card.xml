@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/colorBackground"
     android:elevation="3dp"
@@ -28,17 +28,15 @@
 
         <TextView
             android:id="@+id/courseId"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
-            android:autoSizeMaxTextSize="17sp"
+            android:autoSizeMaxTextSize="13sp"
             android:autoSizeTextType="uniform"
             android:textColor="@color/colorSelfDefinedHint"
             android:textFontWeight="600"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.30"
             android:paddingTop="2dp"
             app:layout_constraintStart_toEndOf="@id/courseTitle"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/courseTitle"
+            app:layout_constraintTop_toBottomOf="@id/courseId"
             android:layout_marginTop="30dp"
             android:layout_marginStart="70dp"
             android:text="@string/click_to_course"

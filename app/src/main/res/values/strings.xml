@@ -26,4 +26,6 @@
     <string name="empty_course_title">DEFAULT COURSE TITLE</string>
     <string name="language">Language: English (Default)</string>
     <string name="language_hint">Same as system default</string>
+    <string name="sync_button">Sync</string>
+    <string name="currently_sync">Syncing...</string>
 </resources>
