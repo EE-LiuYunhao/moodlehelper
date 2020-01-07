@@ -6,14 +6,16 @@ function switchURL(username, password)
     else if(window.location.host==="hkuportal.hku.hk" && window.location.pathname==="/login.html")
         returnStr += loginToPortal(username, password);
     else
-        returnStr += jumpToELearning();
+        returnStr += retrieveCourses();
 
     return returnStr;
 }
 
 function retrieveCourses()
 {
-    var courseTable = document.getElementById("courses").children[0];
+    var myFrame = document.getElementsByClassName('PTPAGELETBODY')[0].firstElementChild.firstElementChild;
+
+    var courseTable = myFrame.contentWindow.document.getElementById('courses').children[0];
     if(courseTable===null) return null;
     var courseList = [];
     for(i of courseTable.children)
