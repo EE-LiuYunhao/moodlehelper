@@ -59,10 +59,17 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     {
         String tempURLStr = courses.get(position).courseURL.toString();
         int idStart = tempURLStr.indexOf("id=");
-        String tempCourseName = courses.get(position).courseName + ": " + courses.get(position).courseTitle;
+        String tempCourseName = courses.get(position).courseName;
 
         holder.courseName.setText(tempCourseName);
-        holder.courseId.setText(tempURLStr.substring(idStart));
+        holder.courseTitle.setText(courses.get(position).courseTitle);
+
+        if(position==courses.size()-1)
+        {
+            ViewGroup.MarginLayoutParams itemMargin = (ViewGroup.MarginLayoutParams) holder.item.getLayoutParams();
+            itemMargin.bottomMargin = 170;
+            holder.item.setLayoutParams(itemMargin);
+        }
     }
 
     @Override
@@ -94,7 +101,8 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener
     {
         TextView courseName;
-        TextView courseId;
+        TextView courseTitle;
+        View item;
 
         /**
          * Constructor for the view holder, binding the view with variables
@@ -105,9 +113,10 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         {
             super(itemView);
             itemView.setOnClickListener(this);
+            item = itemView;
 
             courseName = itemView.findViewById(R.id.course_setting_name);
-            courseId = itemView.findViewById(R.id.course_setting_id);
+            courseTitle = itemView.findViewById(R.id.course_setting_title);
         }
 
         /**
@@ -124,7 +133,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
             itemView.setOnClickListener(this);
 
             courseName = itemView.findViewById(courseNameId);
-            courseId = itemView.findViewById(courseIdId);
+            courseTitle = itemView.findViewById(courseIdId);
         }
 
         @Override

@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.CourseCardBaseAdapter;
+import cs.hku.hk.moodlehelper.supports.WebExtension;
 
 public class SettingsActivity extends AppCompatActivity implements CourseCardBaseAdapter.ItemClickListener
 {
@@ -28,6 +30,9 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
 
     TextView mUID;
     TextView mPIN;
+    Button syncBtn;
+
+    WebExtension extension;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -108,6 +113,17 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
         coursesList = findViewById(R.id.courses_list);
         coursesList.setLayoutManager(layoutManager);
         coursesList.setAdapter(mAdapter);
+
+        syncBtn = findViewById(R.id.sync_button);
+        syncBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                extension = new WebExtension(SettingsActivity.this, coursesList);
+                extension.execute();
+            }
+        });
     }
 
     @Override
@@ -169,7 +185,6 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
         final EditText courseTitle = addCourseView.findViewById(R.id.edit_course_title);
         final SharedPreferences courseUrls = getSharedPreferences("courses", MODE_PRIVATE);
         final SharedPreferences courseTitles = getSharedPreferences("names", MODE_PRIVATE);
-        //TODO: use the courseTitles in UI
         final String urlStr = courseUrls.getString(name,getString(R.string.example_course_url));
         final String titleStr = courseTitles.getString(name, getString(R.string.example_course_title));
 

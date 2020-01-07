@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,8 @@ import cs.hku.hk.moodlehelper.R;
  */
 public class CourseCardButtonAdapter extends CourseCardBaseAdapter
 {
+
+    private int cardWidth;
     /**
      * Constructor for the CourseCardBaseAdapter
      *
@@ -42,7 +45,26 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     public void onBindViewHolder(@NonNull CourseCardBaseAdapter.ViewHolder holder, int position)
     {
         holder.courseName.setText(courses.get(position).courseName);
-        holder.courseId.setText(courses.get(position).courseTitle);
+        holder.courseTitle.setText(courses.get(position).courseTitle);
+
+        final TextView courseTitleCopy = holder.courseTitle;
+        final TextView courseNameCopy  = holder.courseName;
+
+        holder.courseName.post(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                int totalMargin = ((ViewGroup.MarginLayoutParams)courseNameCopy.getLayoutParams()).leftMargin
+                        + ((ViewGroup.MarginLayoutParams)courseNameCopy.getLayoutParams()).rightMargin
+                        + ((ViewGroup.MarginLayoutParams)courseTitleCopy.getLayoutParams()).leftMargin
+                        + ((ViewGroup.MarginLayoutParams)courseTitleCopy.getLayoutParams()).rightMargin;
+
+                ViewGroup.LayoutParams titleLayout = courseTitleCopy.getLayoutParams();
+                titleLayout.width = cardWidth - totalMargin - courseNameCopy.getWidth();
+                courseTitleCopy.setLayoutParams(titleLayout);
+            }
+        });
     }
 
     /**
@@ -53,10 +75,18 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     {
         Button btn;
 
-        ViewHolder(View itemView)
+        ViewHolder(final View itemView)
         {
             super(itemView, R.id.courseTitle, R.id.courseId);
 
+            itemView.post(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    cardWidth = itemView.getWidth();
+                }
+            });
             btn = itemView.findViewById(R.id.course_button);
             btn.setOnClickListener(new View.OnClickListener()
             {

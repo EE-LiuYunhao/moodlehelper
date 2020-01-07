@@ -86,8 +86,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
-        android:paddingStart="15dp"
-        android:paddingEnd="0dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,6 +97,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
         android:backgroundTint="@color/colorPrimary"
         android:clickable="true"
         android:elevation="3dp"
@@ -119,7 +120,7 @@
         android:textSize="15sp"
         android:textFontWeight="500"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
+        app:layout_constraintTop_toBottomOf="@id/sync_button" />
 
     <TextView
         android:id="@+id/language_hint"
@@ -130,6 +131,20 @@
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/language"
-        app:layout_constraintTop_toBottomOf="@+id/pin_value" />
+        app:layout_constraintTop_toBottomOf="@id/sync_button" />
+
+    <Button
+        android:id="@+id/sync_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sync_button"
+        app:layout_constraintStart_toEndOf="@id/enter_pin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pin_value"
+        android:layout_marginTop="3dp"
+        android:backgroundTint="@color/colorBackground"
+        android:shadowDx="5.0"
+        android:shadowDy="3.2"
+        android:outlineAmbientShadowColor="@color/colorPrimaryShadow"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,4 +26,6 @@
     <string name="empty_course_title">【默認課程】</string>
     <string name="language">語言：繁體中文</string>
     <string name="language_hint">與系統語言設置一致</string>
+    <string name="sync_button">同步</string>
+    <string name="currently_sync">正在同步…</string>
 </resources>
