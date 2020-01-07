@@ -1,3 +1,4 @@
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png" alt="icon" width="10%"></img>
 # HKU Moodle Helper
 
 Maybe every student graduated from the University of Hong Kong will complaint the Moodle page of this university
