@@ -120,7 +120,7 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
             @Override
             public void onClick(View v)
             {
-                extension = new WebExtension(SettingsActivity.this, findViewById(R.id.courses_list));
+                extension = new WebExtension(SettingsActivity.this, coursesList);
                 extension.execute();
             }
         });

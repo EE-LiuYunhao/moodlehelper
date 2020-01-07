@@ -11,6 +11,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +20,9 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -29,6 +34,7 @@ import cs.hku.hk.moodlehelper.R;
 public class WebExtension extends WebViewClient
 {
     private Context rootContext;
+    private RecyclerView updatedView;
     private WebView webView;
     private WebSettings settings;
 
@@ -40,11 +46,12 @@ public class WebExtension extends WebViewClient
     /**
      * Constructor
      * @param rootContext the UI context in which the WebExtension is invoked
-     * @param dialogView the view in which the Processing Dialog should show
+     * @param updatedView the view to be updated
      */
-    public WebExtension(Context rootContext, View dialogView)
+    public WebExtension(Context rootContext, RecyclerView updatedView)
     {
         this.rootContext = rootContext;
+        this.updatedView = updatedView;
         SharedPreferences sp = rootContext.getSharedPreferences("user", Context.MODE_PRIVATE);
         userName = sp.getString("portalID", "");
         userPIN  = sp.getString("portalPIN","");
@@ -55,7 +62,8 @@ public class WebExtension extends WebViewClient
         settings = webView.getSettings();
         configWebView();
 
-        syncingDialog = new ProgressDialog(dialogView, R.string.currently_sync);
+        syncingDialog = new ProgressDialog(updatedView, R.string.currently_sync);
+        syncingDialog.setAutoDismiss(false);
     }
 
     /**
@@ -90,22 +98,27 @@ public class WebExtension extends WebViewClient
     public void onPageFinished(WebView view, String url)
     {
         super.onPageFinished(view, url);
-        syncingDialog.dismiss();
+        final Pattern pattern = Pattern.compile("\\[.*]");
         //evaluate javascript segments
         webView.evaluateJavascript(jstr, new ValueCallback<String>()
         {
             @Override public void onReceiveValue(String value)
             {
-                if(value.matches("\\[.*]"))
+                Matcher m = pattern.matcher(value);
+                if(m.find())
                 {
                     syncingDialog.dismiss();
                     try
                     {
-                        JSONArray courseArray = new JSONArray(value);
+                        String sub = m.group().replace("\\\"","\"");
+                        JSONArray courseArray = new JSONArray(sub);
                         handleJSONArray(courseArray);
                     }
                     catch (JSONException e){/*skip*/}
                     destroy();
+
+                    ((CourseCardBaseAdapter) Objects.requireNonNull(updatedView.getAdapter())).refreshCourseList();
+                    updatedView.getAdapter().notifyDataSetChanged();
                 }
 
                 Log.d("JS", value);
@@ -150,7 +163,7 @@ public class WebExtension extends WebViewClient
     public void execute()
     {
         syncingDialog.show();
-        webView.loadUrl("hkuportal.hku.hk/login.html");
+        webView.loadUrl("https://hkuportal.hku.hk/login.html");
     }
 
     /**
@@ -162,8 +175,6 @@ public class WebExtension extends WebViewClient
         {
             webView.loadDataWithBaseURL(null, "", "text/html", "utf-8", null);
             webView.clearHistory();
-
-            ((ViewGroup) webView.getParent()).removeView(webView);
             webView.destroy();
             webView = null;
         }
@@ -184,16 +195,13 @@ public class WebExtension extends WebViewClient
         {
             JSONObject courseItem = array.getJSONObject(i);
             String courseName = courseItem.getString("course_name");
-            if(spCourses.getString(courseName, "").equals(""))
-            {
-                SharedPreferences.Editor editor = spCourses.edit();
-                editor.putString(courseName, courseItem.getString("course_url"));
-                editor.apply();
+            SharedPreferences.Editor editor = spCourses.edit();
+            editor.putString(courseName, courseItem.getString("course_url"));
+            editor.apply();
 
-                editor = spNames.edit();
-                editor.putString(courseName, "*"+courseItem.getString("course_title"));
-            }
-            //else: already existing in shared preferences
+            editor = spNames.edit();
+            editor.putString(courseName, "*"+courseItem.getString("course_title"));
+            editor.apply();
         }
     }
 }
