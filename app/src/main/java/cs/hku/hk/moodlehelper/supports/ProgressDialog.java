@@ -1,11 +1,13 @@
 package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
+import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -23,6 +25,7 @@ public class ProgressDialog
     private ProgressView mProgressView;
 
     private MyHandler myHandler;
+
     private boolean autoDismiss = true;
 
     private static class MyHandler extends android.os.Handler
@@ -100,6 +103,7 @@ public class ProgressDialog
                     if(System.currentTimeMillis()-timeOfDraw >= 6000)
                         break;
                 }
+
                 if(autoDismiss)
                     myHandler.sendEmptyMessage(DIALOG_TIME_OUT);
             }
