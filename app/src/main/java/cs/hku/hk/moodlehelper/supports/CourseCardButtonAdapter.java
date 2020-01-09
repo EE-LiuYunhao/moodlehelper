@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,7 +74,9 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
      */
     public class ViewHolder extends CourseCardBaseAdapter.ViewHolder implements View.OnClickListener
     {
-        Button btn;
+        ImageButton btn;
+        ImageButton setting;
+        ImageButton delete;
 
         ViewHolder(final View itemView)
         {
@@ -94,6 +97,27 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                 public void onClick(View v)
                 {
                     if (mClickListener != null) mClickListener.onItemClick(v, courses.get(getAdapterPosition()).courseName);
+                }
+            });
+
+            setting = itemView.findViewById(R.id.course_button_setting);
+            setting.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    CourseListManipulate.editCourseItem(v.getContext(),CourseCardButtonAdapter.this, courses.get(getAdapterPosition()).courseName)
+                    .show();
+                }
+            });
+
+            delete = itemView.findViewById(R.id.course_delete);
+            delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    CourseListManipulate.deleteCourse(v.getContext(), CourseCardButtonAdapter.this, courses.get(getAdapterPosition()).courseName);
                 }
             });
         }

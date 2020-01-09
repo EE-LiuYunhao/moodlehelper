@@ -53,7 +53,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         return new ViewHolder(itemView);
     }
 
-    // binds the data to the textview in each cell
+    // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {

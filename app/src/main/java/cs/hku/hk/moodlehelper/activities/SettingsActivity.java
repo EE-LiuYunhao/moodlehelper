@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.CourseCardBaseAdapter;
+import cs.hku.hk.moodlehelper.supports.CourseListManipulate;
 import cs.hku.hk.moodlehelper.supports.WebExtension;
 
 public class SettingsActivity extends AppCompatActivity implements CourseCardBaseAdapter.ItemClickListener
@@ -176,71 +177,6 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
     @Override
     public void onItemClick(View view, final String name)
     {
-        final View addCourseView = View.inflate(view.getContext(), R.layout.edit_course, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-        builder.setView(addCourseView);
-
-        final EditText courseName = addCourseView.findViewById(R.id.edit_course_name);
-        final EditText courseUrl = addCourseView.findViewById(R.id.edit_course_url);
-        final EditText courseTitle = addCourseView.findViewById(R.id.edit_course_title);
-        final SharedPreferences courseUrls = getSharedPreferences("courses", MODE_PRIVATE);
-        final SharedPreferences courseTitles = getSharedPreferences("names", MODE_PRIVATE);
-        final String urlStr = courseUrls.getString(name,getString(R.string.example_course_url));
-        final String titleStr = courseTitles.getString(name, getString(R.string.example_course_title));
-
-        courseName.setText(name);
-        courseName.setEnabled(false);
-        courseUrl.setText(urlStr);
-        courseTitle.setText(titleStr);
-
-        builder.setPositiveButton(R.string.confirm,
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-
-                        String courseUrlStr = courseUrl.getText().toString();
-                        String courseTitleStr = courseTitle.getText().toString();
-
-                        SharedPreferences.Editor editor = courseUrls.edit();
-                        editor.putString(name,courseUrlStr);
-                        editor.apply();
-
-                        editor = courseTitles.edit();
-                        editor.putString(name, courseTitleStr);
-                        editor.apply();
-
-                        mAdapter.refreshCourseList();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                }).setNegativeButton(R.string.cancel,
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        dialog.cancel();
-                    }
-                }).setNeutralButton(R.string.delete_course_setting,
-                new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        SharedPreferences.Editor editor = courseUrls.edit();
-                        editor.remove(name);
-                        editor.apply();
-
-                        editor = courseTitles.edit();
-                        editor.remove(name);
-                        editor.apply();
-
-                        mAdapter.refreshCourseList();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-        AlertDialog addCourseDialog = builder.create();
-        addCourseDialog.show();
+        CourseListManipulate.editCourseItem(view.getContext(), mAdapter, name).show();
     }
 }
