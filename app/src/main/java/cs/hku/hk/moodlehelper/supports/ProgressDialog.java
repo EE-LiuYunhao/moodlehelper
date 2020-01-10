@@ -1,7 +1,6 @@
 package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
-import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import cs.hku.hk.moodlehelper.R;
 /**
  * This is for showing a dialog to user when a background connection is in progress
  */
-public class ProgressDialog
+class ProgressDialog
 {
     private static final int DIALOG_TIME_OUT=1;
 
@@ -68,7 +67,7 @@ public class ProgressDialog
      * @param rootView The view a processing dialog should be bound to
      * @param resId The customized string title
      */
-    public ProgressDialog(View rootView, int resId)
+    ProgressDialog(View rootView, int resId)
     {
         this.rootView = rootView;
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
@@ -87,7 +86,8 @@ public class ProgressDialog
      */
     void show()
     {
-        alertDialog.setCancelable(false);
+        if(autoDismiss)
+            alertDialog.setCancelable(false);
         alertDialog.show();
         mProgressView.startAnimation();
 
@@ -126,7 +126,7 @@ public class ProgressDialog
      * Set whether the view can be dismissed automatically
      * @param autoDismiss determine whether dismissed automatically
      */
-    public void setAutoDismiss(boolean autoDismiss)
+    void setAutoDismiss(boolean autoDismiss)
     {
         this.autoDismiss = autoDismiss;
     }

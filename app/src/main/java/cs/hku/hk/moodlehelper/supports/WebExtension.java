@@ -1,10 +1,13 @@
 package cs.hku.hk.moodlehelper.supports;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -162,8 +165,41 @@ public class WebExtension extends WebViewClient
      */
     public void execute()
     {
-        syncingDialog.show();
-        webView.loadUrl("https://hkuportal.hku.hk/login.html");
+        if(isInternetConnected(rootContext) && !userPIN.equals("") && !userName.equals(""))
+        {
+            syncingDialog.show();
+            webView.loadUrl("https://hkuportal.hku.hk/login.html");
+        }
+        else if(userPIN.equals("") || userName.equals(""))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(rootContext);
+            builder.setTitle(R.string.UID_PIN_problem)
+                    .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+            webView.destroy();
+            builder.create().show();
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(rootContext);
+            builder.setTitle(R.string.network_problem)
+                   .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which)
+                       {
+                           dialog.cancel();
+                       }
+                   });
+            webView.destroy();
+            builder.create().show();
+        }
     }
 
     /**
@@ -183,7 +219,7 @@ public class WebExtension extends WebViewClient
     /**
      * Deal with JSON array to store them into shared preferences
      * @param array JSON array to be dealt with
-     * @throws JSONException
+     * @throws JSONException when the parsed JSON array fails in retrieving data
      */
     private void handleJSONArray(JSONArray array) throws JSONException
     {
@@ -203,5 +239,12 @@ public class WebExtension extends WebViewClient
             editor.putString(courseName, "*"+courseItem.getString("course_title"));
             editor.apply();
         }
+    }
+
+    public static boolean isInternetConnected(Context rootContext)
+    {
+        ConnectivityManager manager = (ConnectivityManager)rootContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager==null?null:manager.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }

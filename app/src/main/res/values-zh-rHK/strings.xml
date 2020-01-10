@@ -28,4 +28,6 @@
     <string name="language_hint">與系統語言設置一致</string>
     <string name="sync_button">同步</string>
     <string name="currently_sync">正在同步…</string>
+    <string name="network_problem">無網路連接或者未有授予網路權限</string>
+    <string name="UID_PIN_problem">請輸入您的UID或者PIN</string>
 </resources>

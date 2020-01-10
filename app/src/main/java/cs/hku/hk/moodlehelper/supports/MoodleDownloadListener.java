@@ -75,6 +75,7 @@ public class MoodleDownloadListener implements DownloadListener
                                 long contentLength)
     {
         progressDialog = new ProgressDialog(rootView);
+        progressDialog.setAutoDismiss(true);
         progressDialog.show();
 
         //check for permission

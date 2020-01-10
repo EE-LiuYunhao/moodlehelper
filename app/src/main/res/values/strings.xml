@@ -28,4 +28,6 @@
     <string name="language_hint">Same as system default</string>
     <string name="sync_button">Sync</string>
     <string name="currently_sync">Syncing…</string>
+    <string name="network_problem">Network not connected or network permission not granted!</string>
+    <string name="UID_PIN_problem">You did not enter your UID or PIN</string>
 </resources>
