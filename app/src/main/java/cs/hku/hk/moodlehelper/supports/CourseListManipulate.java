@@ -144,12 +144,29 @@ public class CourseListManipulate
      * @param courseName the name (identifier) of the course to be modified
      */
     static void deleteCourse(@NonNull final Context root,
-                                    @Nullable final RecyclerView.Adapter<?> mAdapter,
-                                    @NonNull final String courseName)
+                             @Nullable final RecyclerView.Adapter<?> mAdapter,
+                             @NonNull final String courseName)
     {
         final SharedPreferences courseUrls = root.getSharedPreferences("courses", Context.MODE_PRIVATE);
         final SharedPreferences courseTitles = root.getSharedPreferences("names", Context.MODE_PRIVATE);
 
         deleteCourse(courseUrls, courseTitles, mAdapter, courseName);
+    }
+
+    static int setCourseCategory(@NonNull final Context root,
+                                  @Nullable final RecyclerView.Adapter<?> mAdapter,
+                                  @NonNull final String courseName,
+                                  final int category)
+    {
+        final SharedPreferences sp = root.getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        editor.putInt(courseName, category);
+        editor.apply();
+
+        if(mAdapter != null)
+            mAdapter.notifyDataSetChanged();
+
+        return category;
     }
 }

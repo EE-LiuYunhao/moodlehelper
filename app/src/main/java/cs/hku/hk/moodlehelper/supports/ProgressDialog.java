@@ -86,29 +86,29 @@ class ProgressDialog
      */
     void show()
     {
-        if(autoDismiss)
-            alertDialog.setCancelable(false);
+        alertDialog.setCancelable(false);
         alertDialog.show();
         mProgressView.startAnimation();
 
         timeOfDraw = System.currentTimeMillis();
 
-        final Thread timeCounter = new Thread(new Runnable()
+        if(autoDismiss)
         {
-            @Override
-            public void run()
+            final Thread timeCounter = new Thread(new Runnable()
             {
-                while(true)
+                @Override
+                public void run()
                 {
-                    if(System.currentTimeMillis()-timeOfDraw >= 6000)
-                        break;
-                }
-
-                if(autoDismiss)
+                    while(true)
+                    {
+                        if(System.currentTimeMillis()-timeOfDraw >= 6000)
+                            break;
+                    }
                     myHandler.sendEmptyMessage(DIALOG_TIME_OUT);
-            }
-        });
-        timeCounter.start();
+                }
+            });
+            timeCounter.start();
+        }
     }
 
     /**
@@ -124,6 +124,7 @@ class ProgressDialog
 
     /**
      * Set whether the view can be dismissed automatically
+     * MUST BE CALLED BEFORE this.show()
      * @param autoDismiss determine whether dismissed automatically
      */
     void setAutoDismiss(boolean autoDismiss)

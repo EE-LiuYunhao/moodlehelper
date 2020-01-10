@@ -8,6 +8,9 @@
     <color name="colorSelfDefinedHint">#6B6B6B</color>
     <color name="colorBackground">#f5eede</color>
     <color name="colorText">#000000</color>
-    <color name="transparent_background">#60000000</color>
+    <color name="transparent_background">#00000000</color>
     <color name="progress_foreground">#FF0066</color>
+    <color name="major_courses">#E9B1EF</color>
+    <color name="minor_courses">#AAD5E0</color>
+    <color name="common_core_courses">#98C3A6</color>
 </resources>

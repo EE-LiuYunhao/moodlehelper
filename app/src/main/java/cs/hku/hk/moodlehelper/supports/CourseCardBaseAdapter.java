@@ -31,6 +31,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     LayoutInflater mInflater;
     View rootView;
     List<Course> courses;
+    private int bottomMargin = 15;
 
     /**
      * Constructor for the CourseCardBaseAdapter
@@ -57,16 +58,14 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        String tempURLStr = courses.get(position).courseURL.toString();
-        int idStart = tempURLStr.indexOf("id=");
         String tempCourseName = courses.get(position).courseName;
-
         holder.courseName.setText(tempCourseName);
         holder.courseTitle.setText(courses.get(position).courseTitle);
 
         if(position==courses.size()-1)
         {
             ViewGroup.MarginLayoutParams itemMargin = (ViewGroup.MarginLayoutParams) holder.item.getLayoutParams();
+            bottomMargin = itemMargin.bottomMargin;
             itemMargin.bottomMargin = 170;
             holder.item.setLayoutParams(itemMargin);
         }
@@ -131,6 +130,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         {
             super(itemView);
             itemView.setOnClickListener(this);
+            item = itemView;
 
             courseName = itemView.findViewById(courseNameId);
             courseTitle = itemView.findViewById(courseIdId);
@@ -242,5 +242,17 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
             }
         }
         return null;
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder)
+    {
+        if(holder.item!=null)
+        {
+            ViewGroup.MarginLayoutParams itemMargin = (ViewGroup.MarginLayoutParams) holder.item.getLayoutParams();
+            itemMargin.bottomMargin = bottomMargin;
+            holder.item.setLayoutParams(itemMargin);
+        }
+        super.onViewRecycled(holder);
     }
 }

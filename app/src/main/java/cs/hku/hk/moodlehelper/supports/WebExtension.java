@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.webkit.ValueCallback;
@@ -14,6 +15,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -36,6 +38,8 @@ import cs.hku.hk.moodlehelper.R;
  */
 public class WebExtension extends WebViewClient
 {
+    private static final int WEBVIEW_TIME_OUT = 1;
+
     private Context rootContext;
     private RecyclerView updatedView;
     private WebView webView;
@@ -45,6 +49,38 @@ public class WebExtension extends WebViewClient
     private String userPIN;
     private ProgressDialog syncingDialog;
     private String jstr;
+
+    private static class MyHandler extends android.os.Handler
+    {
+        private WebExtension extension;
+
+        MyHandler(WebExtension extension)
+        {
+            this.extension = extension;
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg)
+        {
+            if(msg.what == WEBVIEW_TIME_OUT)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(extension.rootContext);
+                builder.setTitle(R.string.load_failure)
+                       .setMessage(R.string.network_problem)
+                       .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.cancel();
+                            }
+                        });
+                extension.destroy();
+                builder.create().show();
+            }
+        }
+    }
+    private MyHandler myHandler;
 
     /**
      * Constructor
@@ -67,6 +103,8 @@ public class WebExtension extends WebViewClient
 
         syncingDialog = new ProgressDialog(updatedView, R.string.currently_sync);
         syncingDialog.setAutoDismiss(false);
+
+        myHandler = new MyHandler(this);
     }
 
     /**
@@ -169,6 +207,21 @@ public class WebExtension extends WebViewClient
         {
             syncingDialog.show();
             webView.loadUrl("https://hkuportal.hku.hk/login.html");
+            final Thread timeCounter = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    long timeOfDraw = System.currentTimeMillis();
+                    while(true)
+                    {
+                        if(System.currentTimeMillis()-timeOfDraw >= 20000)
+                            break;
+                    }
+                    myHandler.sendEmptyMessage(WEBVIEW_TIME_OUT);
+                }
+            });
+            timeCounter.start();
         }
         else if(userPIN.equals("") || userName.equals(""))
         {
@@ -182,13 +235,14 @@ public class WebExtension extends WebViewClient
                             dialog.cancel();
                         }
                     });
-            webView.destroy();
+            destroy();
             builder.create().show();
         }
         else
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(rootContext);
-            builder.setTitle(R.string.network_problem)
+            builder.setTitle(R.string.load_failure)
+                   .setMessage(R.string.network_problem)
                    .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
                    {
                        @Override
@@ -197,7 +251,7 @@ public class WebExtension extends WebViewClient
                            dialog.cancel();
                        }
                    });
-            webView.destroy();
+            destroy();
             builder.create().show();
         }
     }

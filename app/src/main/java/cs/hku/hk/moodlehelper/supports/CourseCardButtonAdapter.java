@@ -1,7 +1,9 @@
 package cs.hku.hk.moodlehelper.supports;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -9,6 +11,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+
+import org.w3c.dom.Text;
 
 import java.util.Map;
 
@@ -21,6 +26,10 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
 {
 
     private int cardWidth;
+
+    private final static int MAJOR_COURSE = 1;
+    private final static int MINOR_COURSE = 2;
+    private final static int CC_COURSE    = 3;
     /**
      * Constructor for the CourseCardBaseAdapter
      *
@@ -46,6 +55,24 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     {
         holder.courseName.setText(courses.get(position).courseName);
         holder.courseTitle.setText(courses.get(position).courseTitle);
+        SharedPreferences sp = rootView.getContext().getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
+        int category = sp.getInt(courses.get(position).courseName, 0);
+        category %= 10;
+        switch(category)
+        {
+            case MAJOR_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.major_courses, rootView.getContext().getTheme()));
+                break;
+            case MINOR_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.minor_courses, rootView.getContext().getTheme()));
+                break;
+            case CC_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.common_core_courses, rootView.getContext().getTheme()));
+                break;
+            case 0:
+            default:
+                break;
+        }
 
         final TextView courseTitleCopy = holder.courseTitle;
         final TextView courseNameCopy  = holder.courseName;
@@ -76,6 +103,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
         ImageButton btn;
         ImageButton setting;
         ImageButton delete;
+        ImageButton category;
 
         ViewHolder(final View itemView)
         {
@@ -117,6 +145,43 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                 public void onClick(View v)
                 {
                     CourseListManipulate.deleteCourse(v.getContext(), CourseCardButtonAdapter.this, courses.get(getAdapterPosition()).courseName);
+                }
+            });
+
+            category = itemView.findViewById(R.id.course_category);
+            category.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+                    View dialogView = View.inflate(rootView.getContext(), R.layout.edit_course_category, null);
+                    builder.setView(dialogView);
+                    final AlertDialog alertDialog = builder.create();
+
+                    TextView [] categories = new TextView[4];
+                    categories[0] = dialogView.findViewById(R.id.color_default);
+                    categories[1] = dialogView.findViewById(R.id.color_major);
+                    categories[2] = dialogView.findViewById(R.id.color_minor);
+                    categories[3] = dialogView.findViewById(R.id.color_ccc);
+
+                    for(int i=0; i<categories.length; i++)
+                    {
+                        if(categories[i]!=null)
+                        {
+                            final int i_copy = i;
+                            categories[i].setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    CourseListManipulate.setCourseCategory(v.getContext(),CourseCardButtonAdapter.this,courses.get(getAdapterPosition()).courseName,i_copy);
+                                    alertDialog.cancel();
+                                }
+                            });
+                        }
+                    }
+                    alertDialog.show();
                 }
             });
         }
@@ -168,5 +233,13 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     private void alertNoCourses()
     {
         Toast.makeText(rootView.getContext(), R.string.no_course, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull CourseCardBaseAdapter.ViewHolder holder)
+    {
+        if(holder.item!=null)
+            ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.colorBackground));
+        super.onViewRecycled(holder);
     }
 }
