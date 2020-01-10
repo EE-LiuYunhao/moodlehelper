@@ -1,9 +1,9 @@
 <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png" alt="icon" width="10%"></img>
 # HKU Moodle Helper
 
-Maybe every student graduated from the University of Hong Kong will complaint the Moodle page of this university
+Maybe every student graduated from the University of Hong Kong will complain the Moodle page of this university
 which can be the most frequently used website during their school time. The website is powerful, though, containing 
-all the learning resources and quick entries to all kinds of e-learning online pages. However, the HKU Moodle stores
+all the learning resources and quick links to all kinds of e-learning web pages. However, the HKU Moodle stores
 all the courses you have ever taken, FOREVER. Consider that after 2 or 3 years in the University, you may have already
 enrolled in many a course or activity. Most of them, although you are not going to access it any longer, still appear
 in the webpage together with other courses. This makes the view messy. 
@@ -58,6 +58,7 @@ interact with Moodle website and layouts.
 - [x] Enable syncing with HKU Portal E-Learning. 
 - [ ] Beautify the outlook and layouts. 
 - [x] Display the course names togethe with the course codes. 
+- [ ] ... *Anything you feel important or interesting \^_\^*
 
 -----
 
