@@ -17,7 +17,7 @@ method to use, is annoying.
 
 <img src=".idea/img/1.jpg" alt="Loading dialog" width="20%"></img>
 <img src=".idea/img/2.jpg" alt="Moodle content" width="20%"></img>
-<img src=".idea/img/4.jpg" alt="Cards for courses" width="20%"></img>
+<img src=".idea/img/3-1.jpg" alt="Cards for courses" width="20%"></img>
 <img src=".idea/img/3.jpg" alt="Setting activities" width="20%"></img>
 
 ## Basic Functionalities: 
