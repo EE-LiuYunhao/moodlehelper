@@ -2,6 +2,8 @@ package cs.hku.hk.moodlehelper.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,12 +14,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.CourseCardButtonAdapter;
+import cs.hku.hk.moodlehelper.supports.CourseCardMover;
+import cs.hku.hk.moodlehelper.supports.WebExtension;
 
 public class MainActivity extends AppCompatActivity implements CourseCardButtonAdapter.ItemClickListener
 {
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements CourseCardButtonA
         coursesList = findViewById(R.id.main_courses_list);
         coursesList.setLayoutManager(layoutManager);
         coursesList.setAdapter(mAdapter);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new CourseCardMover(mAdapter));
+        helper.attachToRecyclerView(coursesList);
     }
 
     @Override
@@ -91,6 +99,42 @@ public class MainActivity extends AppCompatActivity implements CourseCardButtonA
         gotoWebView.putExtra("courseName", name);
         gotoWebView.putExtra("uid", uid);
         gotoWebView.putExtra("pin", pin);
-        startActivity(gotoWebView);
+        if(WebExtension.isInternetConnected(this) && !uid.equals("") && !pin.equals(""))
+            startActivity(gotoWebView);
+        else if(uid.equals("") || pin.equals(""))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.UID_PIN_problem)
+                    .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+            builder.create().show();
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.network_problem)
+                    .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+            builder.create().show();
+        }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        coursesList.setAdapter(null);
+        super.onDestroy();
     }
 }

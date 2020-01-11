@@ -31,6 +31,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
     LayoutInflater mInflater;
     View rootView;
     List<Course> courses;
+    private int bottomMargin = 15;
 
     /**
      * Constructor for the CourseCardBaseAdapter
@@ -53,20 +54,18 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         return new ViewHolder(itemView);
     }
 
-    // binds the data to the textview in each cell
+    // binds the data to the TextView in each cell
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-        String tempURLStr = courses.get(position).courseURL.toString();
-        int idStart = tempURLStr.indexOf("id=");
         String tempCourseName = courses.get(position).courseName;
-
         holder.courseName.setText(tempCourseName);
         holder.courseTitle.setText(courses.get(position).courseTitle);
 
         if(position==courses.size()-1)
         {
             ViewGroup.MarginLayoutParams itemMargin = (ViewGroup.MarginLayoutParams) holder.item.getLayoutParams();
+            bottomMargin = itemMargin.bottomMargin;
             itemMargin.bottomMargin = 170;
             holder.item.setLayoutParams(itemMargin);
         }
@@ -131,6 +130,7 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         {
             super(itemView);
             itemView.setOnClickListener(this);
+            item = itemView;
 
             courseName = itemView.findViewById(courseNameId);
             courseTitle = itemView.findViewById(courseIdId);
@@ -176,9 +176,11 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         String courseName;
         URL courseURL;
         String courseTitle;
+        int priority;
 
         Course(String courseName, String courseTitle, String urlStr)
         {
+            this.priority = 0;
             this.courseName = courseName;
             this.courseTitle = courseTitle.equals("") || courseTitle.matches("[\t ]*")?rootView.getContext().getString(R.string.empty_course_title):courseTitle;
             try
@@ -190,6 +192,12 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
                 Toast.makeText(rootView.getContext(),R.string.wrong_url,Toast.LENGTH_SHORT).show();
                 mClickListener.onItemClick(rootView, courseName);
             }
+        }
+
+        Course(String courseName, String courseTitle, String urlStr, int priority)
+        {
+            this(courseName, courseTitle, urlStr);
+            this.priority = priority;
         }
     }
 
@@ -242,5 +250,17 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
             }
         }
         return null;
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ViewHolder holder)
+    {
+        if(holder.item!=null)
+        {
+            ViewGroup.MarginLayoutParams itemMargin = (ViewGroup.MarginLayoutParams) holder.item.getLayoutParams();
+            itemMargin.bottomMargin = bottomMargin;
+            holder.item.setLayoutParams(itemMargin);
+        }
+        super.onViewRecycled(holder);
     }
 }

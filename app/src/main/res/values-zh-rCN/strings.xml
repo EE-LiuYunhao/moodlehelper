@@ -8,7 +8,7 @@
     <string name="initial_pin">PIN</string>
     <string name="initial_pin_unchanged">密码（未更改）</string>
     <string name="title_activity_settings">設置</string>
-    <string name="click_to_course">浏览课程资源</string>
+    <string name="click_to_course">浏览</string>
     <string name="prompt_enter_course_name">课号</string>
     <string name="prompt_enter_course_url">网址</string>
     <string name="example_course_name">例如：HKUH1005</string>
@@ -28,5 +28,12 @@
     <string name="language_hint">与系统语言设置一致</string>
     <string name="sync_button">同步</string>
     <string name="currently_sync">正在同步…</string>
-
+    <string name="load_failure">加载失败</string>
+    <string name="network_problem">网络未连接或者应用未获得网络权限</string>
+    <string name="UID_PIN_problem">请输入UID或者PIN</string>
+    <string name="major_courses">Major 主修</string>
+    <string name="minor_courses">Minor 辅修</string>
+    <string name="cc_courses">Common Core 通识</string>
+    <string name="default_courses">默认课程类别</string>
+    <string name="change_category">更改课程类别</string>
 </resources>

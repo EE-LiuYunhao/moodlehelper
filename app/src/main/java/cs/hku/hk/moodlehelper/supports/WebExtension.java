@@ -1,16 +1,21 @@
 package cs.hku.hk.moodlehelper.supports;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -33,6 +38,8 @@ import cs.hku.hk.moodlehelper.R;
  */
 public class WebExtension extends WebViewClient
 {
+    private static final int WEBVIEW_TIME_OUT = 1;
+
     private Context rootContext;
     private RecyclerView updatedView;
     private WebView webView;
@@ -42,6 +49,38 @@ public class WebExtension extends WebViewClient
     private String userPIN;
     private ProgressDialog syncingDialog;
     private String jstr;
+
+    private static class MyHandler extends android.os.Handler
+    {
+        private WebExtension extension;
+
+        MyHandler(WebExtension extension)
+        {
+            this.extension = extension;
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg)
+        {
+            if(msg.what == WEBVIEW_TIME_OUT)
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(extension.rootContext);
+                builder.setTitle(R.string.load_failure)
+                       .setMessage(R.string.network_problem)
+                       .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                dialog.cancel();
+                            }
+                        });
+                extension.destroy();
+                builder.create().show();
+            }
+        }
+    }
+    private MyHandler myHandler;
 
     /**
      * Constructor
@@ -64,6 +103,8 @@ public class WebExtension extends WebViewClient
 
         syncingDialog = new ProgressDialog(updatedView, R.string.currently_sync);
         syncingDialog.setAutoDismiss(false);
+
+        myHandler = new MyHandler(this);
     }
 
     /**
@@ -162,8 +203,59 @@ public class WebExtension extends WebViewClient
      */
     public void execute()
     {
-        syncingDialog.show();
-        webView.loadUrl("https://hkuportal.hku.hk/login.html");
+        if(isInternetConnected(rootContext) && !userPIN.equals("") && !userName.equals(""))
+        {
+            syncingDialog.show();
+            webView.loadUrl("https://hkuportal.hku.hk/login.html");
+            final Thread timeCounter = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    long timeOfDraw = System.currentTimeMillis();
+                    while(syncingDialog.isShowing())
+                    {
+                        if(System.currentTimeMillis()-timeOfDraw >= 20000)
+                        {
+                            myHandler.sendEmptyMessage(WEBVIEW_TIME_OUT);
+                            break;
+                        }
+                    }
+                }
+            });
+            timeCounter.start();
+        }
+        else if(userPIN.equals("") || userName.equals(""))
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(rootContext);
+            builder.setTitle(R.string.UID_PIN_problem)
+                    .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            dialog.cancel();
+                        }
+                    });
+            destroy();
+            builder.create().show();
+        }
+        else
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(rootContext);
+            builder.setTitle(R.string.load_failure)
+                   .setMessage(R.string.network_problem)
+                   .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which)
+                       {
+                           dialog.cancel();
+                       }
+                   });
+            destroy();
+            builder.create().show();
+        }
     }
 
     /**
@@ -183,14 +275,16 @@ public class WebExtension extends WebViewClient
     /**
      * Deal with JSON array to store them into shared preferences
      * @param array JSON array to be dealt with
-     * @throws JSONException
+     * @throws JSONException when the parsed JSON array fails in retrieving data
      */
     private void handleJSONArray(JSONArray array) throws JSONException
     {
         if(array==null || array.length()==0) return;
+        myHandler.removeCallbacksAndMessages(null);
 
         SharedPreferences spCourses = rootContext.getSharedPreferences("courses", Context.MODE_PRIVATE);
         SharedPreferences spNames = rootContext.getSharedPreferences("names", Context.MODE_PRIVATE);
+        SharedPreferences spPriority = rootContext.getSharedPreferences("PriorityCategory", Context.MODE_PRIVATE);
         for(int i=0; i<array.length(); i++)
         {
             JSONObject courseItem = array.getJSONObject(i);
@@ -202,6 +296,18 @@ public class WebExtension extends WebViewClient
             editor = spNames.edit();
             editor.putString(courseName, "*"+courseItem.getString("course_title"));
             editor.apply();
+
+            editor = spPriority.edit();
+            int originalCategory = spPriority.getInt(courseName,0)%10;
+            editor.putInt(courseName, i*10+originalCategory);
+            editor.apply();
         }
+    }
+
+    public static boolean isInternetConnected(Context rootContext)
+    {
+        ConnectivityManager manager = (ConnectivityManager)rootContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager==null?null:manager.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 }

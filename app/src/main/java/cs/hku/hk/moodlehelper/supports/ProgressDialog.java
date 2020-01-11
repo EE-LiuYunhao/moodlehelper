@@ -1,7 +1,6 @@
 package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
-import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.TextView;
@@ -14,7 +13,7 @@ import cs.hku.hk.moodlehelper.R;
 /**
  * This is for showing a dialog to user when a background connection is in progress
  */
-public class ProgressDialog
+class ProgressDialog
 {
     private static final int DIALOG_TIME_OUT=1;
 
@@ -68,7 +67,7 @@ public class ProgressDialog
      * @param rootView The view a processing dialog should be bound to
      * @param resId The customized string title
      */
-    public ProgressDialog(View rootView, int resId)
+    ProgressDialog(View rootView, int resId)
     {
         this.rootView = rootView;
         AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
@@ -93,22 +92,23 @@ public class ProgressDialog
 
         timeOfDraw = System.currentTimeMillis();
 
-        final Thread timeCounter = new Thread(new Runnable()
+        if(autoDismiss)
         {
-            @Override
-            public void run()
+            final Thread timeCounter = new Thread(new Runnable()
             {
-                while(true)
+                @Override
+                public void run()
                 {
-                    if(System.currentTimeMillis()-timeOfDraw >= 6000)
-                        break;
-                }
-
-                if(autoDismiss)
+                    while(true)
+                    {
+                        if(System.currentTimeMillis()-timeOfDraw >= 6000)
+                            break;
+                    }
                     myHandler.sendEmptyMessage(DIALOG_TIME_OUT);
-            }
-        });
-        timeCounter.start();
+                }
+            });
+            timeCounter.start();
+        }
     }
 
     /**
@@ -124,10 +124,20 @@ public class ProgressDialog
 
     /**
      * Set whether the view can be dismissed automatically
+     * MUST BE CALLED BEFORE this.show()
      * @param autoDismiss determine whether dismissed automatically
      */
-    public void setAutoDismiss(boolean autoDismiss)
+    void setAutoDismiss(boolean autoDismiss)
     {
         this.autoDismiss = autoDismiss;
+    }
+
+    /**
+     * Whether the dialog is still showing on the screen
+     * @return being shown or not
+     */
+    boolean isShowing()
+    {
+        return alertDialog.isShowing();
     }
 }

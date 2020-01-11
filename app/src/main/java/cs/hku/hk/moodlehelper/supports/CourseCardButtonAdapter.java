@@ -1,15 +1,21 @@
 package cs.hku.hk.moodlehelper.supports;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ListIterator;
 import java.util.Map;
 
 import cs.hku.hk.moodlehelper.R;
@@ -17,10 +23,14 @@ import cs.hku.hk.moodlehelper.R;
 /**
  * Adapter for the recycler view in the main activity
  */
-public class CourseCardButtonAdapter extends CourseCardBaseAdapter
+public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements CourseCardMover.CourseCardMoverAdapter
 {
 
     private int cardWidth;
+
+    private final static int MAJOR_COURSE = 1;
+    private final static int MINOR_COURSE = 2;
+    private final static int CC_COURSE    = 3;
     /**
      * Constructor for the CourseCardBaseAdapter
      *
@@ -46,6 +56,24 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     {
         holder.courseName.setText(courses.get(position).courseName);
         holder.courseTitle.setText(courses.get(position).courseTitle);
+        SharedPreferences sp = rootView.getContext().getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
+        int category = sp.getInt(courses.get(position).courseName, 0);
+        category %= 10;
+        switch(category)
+        {
+            case MAJOR_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.major_courses, rootView.getContext().getTheme()));
+                break;
+            case MINOR_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.minor_courses, rootView.getContext().getTheme()));
+                break;
+            case CC_COURSE:
+                ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.common_core_courses, rootView.getContext().getTheme()));
+                break;
+            case 0:
+            default:
+                break;
+        }
 
         final TextView courseTitleCopy = holder.courseTitle;
         final TextView courseNameCopy  = holder.courseName;
@@ -73,7 +101,10 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
      */
     public class ViewHolder extends CourseCardBaseAdapter.ViewHolder implements View.OnClickListener
     {
-        Button btn;
+        ImageButton btn;
+        ImageButton setting;
+        ImageButton delete;
+        ImageButton category;
 
         ViewHolder(final View itemView)
         {
@@ -96,6 +127,64 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                     if (mClickListener != null) mClickListener.onItemClick(v, courses.get(getAdapterPosition()).courseName);
                 }
             });
+
+            setting = itemView.findViewById(R.id.course_button_setting);
+            setting.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    CourseListManipulate.editCourseItem(v.getContext(),CourseCardButtonAdapter.this, courses.get(getAdapterPosition()).courseName)
+                    .show();
+                }
+            });
+
+            delete = itemView.findViewById(R.id.course_delete);
+            delete.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    CourseListManipulate.deleteCourse(v.getContext(), CourseCardButtonAdapter.this, courses.get(getAdapterPosition()).courseName);
+                }
+            });
+
+            category = itemView.findViewById(R.id.course_category);
+            category.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+                    View dialogView = View.inflate(rootView.getContext(), R.layout.edit_course_category, null);
+                    builder.setView(dialogView);
+                    final AlertDialog alertDialog = builder.create();
+
+                    TextView [] categories = new TextView[4];
+                    categories[0] = dialogView.findViewById(R.id.color_default);
+                    categories[1] = dialogView.findViewById(R.id.color_major);
+                    categories[2] = dialogView.findViewById(R.id.color_minor);
+                    categories[3] = dialogView.findViewById(R.id.color_ccc);
+
+                    for(int i=0; i<categories.length; i++)
+                    {
+                        if(categories[i]!=null)
+                        {
+                            final int i_copy = i;
+                            categories[i].setOnClickListener(new View.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(View v)
+                                {
+                                    CourseListManipulate.setCourseCategory(v.getContext(),CourseCardButtonAdapter.this,courses.get(getAdapterPosition()).courseName,i_copy);
+                                    alertDialog.cancel();
+                                }
+                            });
+                        }
+                    }
+                    alertDialog.show();
+                }
+            });
         }
 
         @Override
@@ -111,6 +200,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
         SharedPreferences sp = rootView.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
         SharedPreferences titles = rootView.getContext().getSharedPreferences("names", Context.MODE_PRIVATE);
         courses.clear();
+        SharedPreferences priorityCategory = rootView.getContext().getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
 
         if(sp != null)
         {
@@ -128,8 +218,18 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
+                    int priority = priorityCategory.getInt(entry.getKey(), 0);
+                    priority /= 10;
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr, priority));
                 }
+                courses.sort(new Comparator<Course>()
+                {
+                    @Override
+                    public int compare(Course o1, Course o2)
+                    {
+                        return o2.priority-o1.priority; //smaller priority => bottom
+                    }
+                });
             }
             else
             {
@@ -145,5 +245,31 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     private void alertNoCourses()
     {
         Toast.makeText(rootView.getContext(), R.string.no_course, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull CourseCardBaseAdapter.ViewHolder holder)
+    {
+        if(holder.item!=null)
+            ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.colorBackground, rootView.getContext().getTheme()));
+        super.onViewRecycled(holder);
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition)
+    {
+        Collections.swap(courses, fromPosition, toPosition);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView)
+    {
+        super.onDetachedFromRecyclerView(recyclerView);
+        String [] courseNames = new String[courses.size()];
+        ListIterator it = courses.listIterator();
+        while(it.hasNext())
+            courseNames[it.nextIndex()]=((Course)it.next()).courseName;
+        CourseListManipulate.resetCoursePriority(rootView.getContext(), courseNames);
     }
 }

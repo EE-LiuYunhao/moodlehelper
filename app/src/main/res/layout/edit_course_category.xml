@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="170dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textFontWeight="700"
+        android:textAlignment="center"
+        android:textColor="@color/colorSelfDefinedHint"
+        android:text="@string/change_category" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/color_default"
+                android:drawableStart="@drawable/ic_color_prompt_12dp"
+                android:drawableTint="@color/colorBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textFontWeight="500"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/colorText"
+                android:text="@string/default_courses" />
+            <TextView
+                android:id="@+id/color_major"
+                android:drawableStart="@drawable/ic_color_prompt_12dp"
+                android:drawableTint="@color/major_courses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textFontWeight="500"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/colorText"
+                android:text="@string/major_courses" />
+            <TextView
+                android:id="@+id/color_minor"
+                android:drawableStart="@drawable/ic_color_prompt_12dp"
+                android:drawableTint="@color/minor_courses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textFontWeight="500"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/colorText"
+                android:text="@string/minor_courses" />
+            <TextView
+                android:id="@+id/color_ccc"
+                android:drawableStart="@drawable/ic_color_prompt_12dp"
+                android:drawableTint="@color/common_core_courses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textFontWeight="500"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:textColor="@color/colorText"
+                android:text="@string/cc_courses" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
