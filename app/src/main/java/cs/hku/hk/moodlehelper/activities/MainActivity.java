@@ -14,12 +14,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.net.URL;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.CourseCardButtonAdapter;
+import cs.hku.hk.moodlehelper.supports.CourseCardMover;
 import cs.hku.hk.moodlehelper.supports.WebExtension;
 
 public class MainActivity extends AppCompatActivity implements CourseCardButtonAdapter.ItemClickListener
@@ -60,6 +62,9 @@ public class MainActivity extends AppCompatActivity implements CourseCardButtonA
         coursesList = findViewById(R.id.main_courses_list);
         coursesList.setLayoutManager(layoutManager);
         coursesList.setAdapter(mAdapter);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new CourseCardMover(mAdapter));
+        helper.attachToRecyclerView(coursesList);
     }
 
     @Override
@@ -124,5 +129,12 @@ public class MainActivity extends AppCompatActivity implements CourseCardButtonA
                     });
             builder.create().show();
         }
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        coursesList.setAdapter(null);
+        super.onDestroy();
     }
 }

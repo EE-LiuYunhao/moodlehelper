@@ -3,7 +3,6 @@ package cs.hku.hk.moodlehelper.supports;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -12,9 +11,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ListIterator;
 import java.util.Map;
 
 import cs.hku.hk.moodlehelper.R;
@@ -22,7 +23,7 @@ import cs.hku.hk.moodlehelper.R;
 /**
  * Adapter for the recycler view in the main activity
  */
-public class CourseCardButtonAdapter extends CourseCardBaseAdapter
+public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements CourseCardMover.CourseCardMoverAdapter
 {
 
     private int cardWidth;
@@ -199,6 +200,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
         SharedPreferences sp = rootView.getContext().getSharedPreferences("courses", Context.MODE_PRIVATE);
         SharedPreferences titles = rootView.getContext().getSharedPreferences("names", Context.MODE_PRIVATE);
         courses.clear();
+        SharedPreferences priorityCategory = rootView.getContext().getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
 
         if(sp != null)
         {
@@ -216,8 +218,18 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
                     {
                         continue;
                     }
-                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr));
+                    int priority = priorityCategory.getInt(entry.getKey(), 0);
+                    priority /= 10;
+                    courses.add(new Course(entry.getKey(), titles.getString(entry.getKey(),""),courseUrlStr, priority));
                 }
+                courses.sort(new Comparator<Course>()
+                {
+                    @Override
+                    public int compare(Course o1, Course o2)
+                    {
+                        return o2.priority-o1.priority; //smaller priority => bottom
+                    }
+                });
             }
             else
             {
@@ -239,7 +251,25 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter
     public void onViewRecycled(@NonNull CourseCardBaseAdapter.ViewHolder holder)
     {
         if(holder.item!=null)
-            ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.colorBackground));
+            ((CardView)holder.item).setCardBackgroundColor(rootView.getContext().getResources().getColor(R.color.colorBackground, rootView.getContext().getTheme()));
         super.onViewRecycled(holder);
+    }
+
+    @Override
+    public void onItemMove(int fromPosition, int toPosition)
+    {
+        Collections.swap(courses, fromPosition, toPosition);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView)
+    {
+        super.onDetachedFromRecyclerView(recyclerView);
+        String [] courseNames = new String[courses.size()];
+        ListIterator it = courses.listIterator();
+        while(it.hasNext())
+            courseNames[it.nextIndex()]=((Course)it.next()).courseName;
+        CourseListManipulate.resetCoursePriority(rootView.getContext(), courseNames);
     }
 }

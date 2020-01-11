@@ -176,9 +176,11 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         String courseName;
         URL courseURL;
         String courseTitle;
+        int priority;
 
         Course(String courseName, String courseTitle, String urlStr)
         {
+            this.priority = 0;
             this.courseName = courseName;
             this.courseTitle = courseTitle.equals("") || courseTitle.matches("[\t ]*")?rootView.getContext().getString(R.string.empty_course_title):courseTitle;
             try
@@ -190,6 +192,12 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
                 Toast.makeText(rootView.getContext(),R.string.wrong_url,Toast.LENGTH_SHORT).show();
                 mClickListener.onItemClick(rootView, courseName);
             }
+        }
+
+        Course(String courseName, String courseTitle, String urlStr, int priority)
+        {
+            this(courseName, courseTitle, urlStr);
+            this.priority = priority;
         }
     }
 

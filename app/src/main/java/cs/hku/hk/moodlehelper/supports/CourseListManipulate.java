@@ -34,6 +34,7 @@ public class CourseListManipulate
 
         final SharedPreferences courseUrls = root.getSharedPreferences("courses", Context.MODE_PRIVATE);
         final SharedPreferences courseTitles = root.getSharedPreferences("names", Context.MODE_PRIVATE);
+        final SharedPreferences coursePC = root.getSharedPreferences("PriorityCategory", Context.MODE_PRIVATE);
         final String urlStr = courseUrls.getString(name, root.getString(R.string.example_course_url));
         final String titleStr = courseTitles.getString(name, root.getString(R.string.example_course_title));
 
@@ -68,7 +69,7 @@ public class CourseListManipulate
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        deleteCourse(courseUrls, courseTitles, mAdapter, name);
+                        deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, name);
                     }
                 });
 
@@ -115,11 +116,13 @@ public class CourseListManipulate
      * Remove the course info entry from the shared preferences
      * @param courseUrls shared preference storing course url
      * @param courseTitles shared preference storing course titles
+     * @param coursePC shared preference storing course priorities & categories
      * @param mAdapter the adapter for the list in which the course items are displayed
      * @param name the name (identifier) of the course to be modified
      */
     static private void deleteCourse(@NonNull SharedPreferences courseUrls,
                                      @NonNull SharedPreferences courseTitles,
+                                     @NonNull SharedPreferences coursePC,
                                      @Nullable final RecyclerView.Adapter<?> mAdapter,
                                      @NonNull final String name)
     {
@@ -129,6 +132,11 @@ public class CourseListManipulate
 
         editor = courseTitles.edit();
         editor.remove(name);
+        editor.apply();
+
+        editor = coursePC.edit();
+        int originalC = coursePC.getInt(name,0)%10;
+        editor.putInt(name,originalC); //clear the P part;
         editor.apply();
 
         if(mAdapter instanceof CourseCardBaseAdapter)
@@ -141,7 +149,7 @@ public class CourseListManipulate
      * Delete the course from the list
      * @param root the context where the list is displayed
      * @param mAdapter the adapter for the list in which the course items are displayed
-     * @param courseName the name (identifier) of the course to be modified
+     * @param courseName the name (identifier) of the course to be deleted
      */
     static void deleteCourse(@NonNull final Context root,
                              @Nullable final RecyclerView.Adapter<?> mAdapter,
@@ -149,11 +157,19 @@ public class CourseListManipulate
     {
         final SharedPreferences courseUrls = root.getSharedPreferences("courses", Context.MODE_PRIVATE);
         final SharedPreferences courseTitles = root.getSharedPreferences("names", Context.MODE_PRIVATE);
+        final SharedPreferences coursePC = root.getSharedPreferences("PriorityCategory", Context.MODE_PRIVATE);
 
-        deleteCourse(courseUrls, courseTitles, mAdapter, courseName);
+        deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, courseName);
     }
 
-    static int setCourseCategory(@NonNull final Context root,
+    /**
+     * Store the course category
+     * @param root the context where the list is displayed
+     * @param mAdapter the adapter for the list in which the course items are displayed
+     * @param courseName the adapter for the list in which the course items are displayed
+     * @param category the category (an integer in [0,9]) of the course to be modified
+     */
+    static void setCourseCategory(@NonNull final Context root,
                                   @Nullable final RecyclerView.Adapter<?> mAdapter,
                                   @NonNull final String courseName,
                                   final int category)
@@ -161,12 +177,45 @@ public class CourseListManipulate
         final SharedPreferences sp = root.getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
-        editor.putInt(courseName, category);
+        int originalCategory = sp.getInt(courseName, 0);
+        originalCategory -= originalCategory % 10; //only keep the priority part
+        originalCategory += category;
+
+        editor.putInt(courseName, originalCategory);
         editor.apply();
 
         if(mAdapter != null)
             mAdapter.notifyDataSetChanged();
+    }
 
-        return category;
+    /**
+     * Store the course priority into shared preference
+     * @param sp the share preference to store the priority
+     * @param courseName the name (identifier) of the course to be modified
+     * @param priority the priority of the course
+     */
+    static private void setCoursePriority(@NonNull final SharedPreferences sp,
+                                          @NonNull final String courseName,
+                                          final int priority)
+    {
+        SharedPreferences.Editor editor = sp.edit();
+
+        int originalPriority = sp.getInt(courseName, 0);
+        originalPriority %= 10; //only keep the category part
+        originalPriority += 10*priority;
+
+        editor.putInt(courseName, originalPriority);
+        editor.apply();
+    }
+
+    static void resetCoursePriority(@NonNull final Context root,
+                                    @Nullable final String [] names)
+    {
+        if(names==null) return;
+        final SharedPreferences sp = root.getSharedPreferences("PriorityCategory",Context.MODE_PRIVATE);
+        for(int i=0; i<names.length; i++)
+        {
+            setCoursePriority(sp, names[i], names.length-i);
+        }
     }
 }

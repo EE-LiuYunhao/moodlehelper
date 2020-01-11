@@ -213,12 +213,14 @@ public class WebExtension extends WebViewClient
                 public void run()
                 {
                     long timeOfDraw = System.currentTimeMillis();
-                    while(true)
+                    while(syncingDialog.isShowing())
                     {
                         if(System.currentTimeMillis()-timeOfDraw >= 20000)
+                        {
+                            myHandler.sendEmptyMessage(WEBVIEW_TIME_OUT);
                             break;
+                        }
                     }
-                    myHandler.sendEmptyMessage(WEBVIEW_TIME_OUT);
                 }
             });
             timeCounter.start();
@@ -278,9 +280,11 @@ public class WebExtension extends WebViewClient
     private void handleJSONArray(JSONArray array) throws JSONException
     {
         if(array==null || array.length()==0) return;
+        myHandler.removeCallbacksAndMessages(null);
 
         SharedPreferences spCourses = rootContext.getSharedPreferences("courses", Context.MODE_PRIVATE);
         SharedPreferences spNames = rootContext.getSharedPreferences("names", Context.MODE_PRIVATE);
+        SharedPreferences spPriority = rootContext.getSharedPreferences("PriorityCategory", Context.MODE_PRIVATE);
         for(int i=0; i<array.length(); i++)
         {
             JSONObject courseItem = array.getJSONObject(i);
@@ -291,6 +295,11 @@ public class WebExtension extends WebViewClient
 
             editor = spNames.edit();
             editor.putString(courseName, "*"+courseItem.getString("course_title"));
+            editor.apply();
+
+            editor = spPriority.edit();
+            int originalCategory = spPriority.getInt(courseName,0)%10;
+            editor.putInt(courseName, i*10+originalCategory);
             editor.apply();
         }
     }

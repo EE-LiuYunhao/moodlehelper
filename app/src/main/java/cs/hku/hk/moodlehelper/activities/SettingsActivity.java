@@ -92,6 +92,11 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
                                 editor.putString(courseNameStr,courseTitleStr);
                                 editor.apply();
 
+                                sharedPreferences = getSharedPreferences("PriorityCategory", MODE_PRIVATE);
+                                editor = sharedPreferences.edit();
+                                editor.putInt(courseNameStr, 0);
+                                editor.apply();
+
                                 mAdapter.refreshCourseList();
                                 mAdapter.notifyDataSetChanged();
                             }

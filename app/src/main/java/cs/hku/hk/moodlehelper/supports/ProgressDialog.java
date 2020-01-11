@@ -131,4 +131,13 @@ class ProgressDialog
     {
         this.autoDismiss = autoDismiss;
     }
+
+    /**
+     * Whether the dialog is still showing on the screen
+     * @return being shown or not
+     */
+    boolean isShowing()
+    {
+        return alertDialog.isShowing();
+    }
 }
