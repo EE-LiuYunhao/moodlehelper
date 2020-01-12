@@ -126,7 +126,14 @@ public class SettingsActivity extends AppCompatActivity implements CourseCardBas
             @Override
             public void onClick(View v)
             {
-                extension = new WebExtension(SettingsActivity.this, coursesList);
+                String userName = mUID.getText().toString();
+                String userPIN = mPIN.getText().toString();
+                if(userPIN.equals(""))
+                {
+                    SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
+                    userPIN = sp.getString("portalPIN", "");
+                }
+                extension = new WebExtension(SettingsActivity.this, coursesList, userName, userPIN);
                 extension.execute();
             }
         });

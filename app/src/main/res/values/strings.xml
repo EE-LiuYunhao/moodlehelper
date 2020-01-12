@@ -30,6 +30,7 @@
     <string name="currently_sync">Syncing…</string>
     <string name="load_failure">Load Failed</string>
     <string name="network_problem">Network not connected or network permission not granted!</string>
+    <string name="sync_problem">The failure may be caused by incorrect UID or PIN or network disconnected</string>
     <string name="UID_PIN_problem">You did not enter your UID or PIN</string>
     <string name="major_courses">Major</string>
     <string name="minor_courses">Minor</string>
