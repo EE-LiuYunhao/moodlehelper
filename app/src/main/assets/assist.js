@@ -6,8 +6,13 @@ function switchURL(username, password)
         return clickUsePortalUID();
     else if(url === "hkuportal.hku.hk/cas/login")
         return enterUIDandPINandClick(username, password);
-    else
+    else if(window.location.host === "moodle.hku.hk")
         return clearViewElements();
+    else
+    {
+        clearViewElements();
+        return "not a desired page";
+    }
 }
 
 function clickUsePortalUID()
@@ -70,6 +75,15 @@ function clearViewElements()
     var page = document.getElementById("page");
     if(page!==null)
         page.style.paddingLeft = "20px";
+
+    var blocks = document.getElementsByClassName("block");
+    if(blocks!==null && blocks.length!==0)
+    {
+        for(var each of blocks)
+        {
+            each.style.display = "none"
+        }
+    }
 
     return "Success at clearViewElements()";
 }

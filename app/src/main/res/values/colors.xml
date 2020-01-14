@@ -13,4 +13,5 @@
     <color name="major_courses">#E9B1EF</color>
     <color name="minor_courses">#AAD5E0</color>
     <color name="common_core_courses">#98C3A6</color>
+    <color name="menu_button_tint">#001C79</color>
 </resources>

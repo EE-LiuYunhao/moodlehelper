@@ -37,4 +37,11 @@
     <string name="cc_courses">Common Core</string>
     <string name="default_courses">Default</string>
     <string name="change_category">Switch Course Category</string>
+    <string name="title_activity_drawer_root">Main View</string>
+    <string name="menu_button_grade">My Grade</string>
+    <string name="menu_button_setting">My Profile</string>
+    <string name="menu_button_sync">Sync</string>
+    <string name="menu_button_clear_all">Sign Out</string>
+    <string name="menu_button_courses">My Courses</string>
+    <string name="menu_group_function">Functions</string>
 </resources>

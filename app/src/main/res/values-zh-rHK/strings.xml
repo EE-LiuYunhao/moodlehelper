@@ -37,4 +37,11 @@
     <string name="cc_courses">Common Core</string>
     <string name="default_courses">Default</string>
     <string name="change_category">更改課程類別</string>
+    <string name="title_activity_drawer_root">主界面</string>
+    <string name="menu_button_grade">我的成績</string>
+    <string name="menu_button_setting">個人設置</string>
+    <string name="menu_button_sync">同步</string>
+    <string name="menu_button_clear_all">註銷</string>
+    <string name="menu_button_courses">我的課程</string>
+    <string name="menu_group_function">功能</string>
 </resources>
