@@ -73,7 +73,10 @@ public class CourseListManipulate
                     @Override
                     public void onClick(DialogInterface dialog, int which)
                     {
-                        deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, name);
+                        if(mAdapter instanceof CourseCardBaseAdapter)
+                            deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, name, ((CourseCardBaseAdapter)mAdapter).getCoursePosition(name));
+                        else
+                            deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, name, -1);
                     }
                 });
 
@@ -132,7 +135,8 @@ public class CourseListManipulate
                                      @NonNull SharedPreferences courseTitles,
                                      @NonNull SharedPreferences coursePC,
                                      @Nullable final RecyclerView.Adapter<?> mAdapter,
-                                     @NonNull final String name)
+                                     @NonNull final String name,
+                                     final int position)
     {
         SharedPreferences.Editor editor = courseUrls.edit();
         editor.remove(name);
@@ -147,10 +151,15 @@ public class CourseListManipulate
         editor.putInt(name,originalC); //clear the P part;
         editor.apply();
 
-        if(mAdapter instanceof CourseCardBaseAdapter)
-            ((CourseCardBaseAdapter)mAdapter).refreshCourseList();
-        if(mAdapter!=null)
-            mAdapter.notifyDataSetChanged();
+        if(mAdapter instanceof CourseCardBaseAdapter && position >= 0)
+        {
+            ((CourseCardBaseAdapter)mAdapter).removeFromCourseList(position);
+        }
+
+        if(mAdapter!=null && position >= 0)
+        {
+            mAdapter.notifyItemRemoved(position);
+        }
     }
 
     /**
@@ -167,7 +176,10 @@ public class CourseListManipulate
         final SharedPreferences courseTitles = root.getSharedPreferences("names", Context.MODE_PRIVATE);
         final SharedPreferences coursePC = root.getSharedPreferences("PriorityCategory", Context.MODE_PRIVATE);
 
-        deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, courseName);
+        if(mAdapter instanceof CourseCardBaseAdapter)
+            deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, courseName, ((CourseCardBaseAdapter)mAdapter).getCoursePosition(courseName));
+        else
+            deleteCourse(courseUrls, courseTitles, coursePC, mAdapter, courseName, -1);
     }
 
     /**

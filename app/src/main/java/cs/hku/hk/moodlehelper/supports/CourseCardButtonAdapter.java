@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -252,7 +251,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements Co
     public void onItemMove(int fromPosition, int toPosition)
     {
         Collections.swap(courses, fromPosition, toPosition);
-        notifyDataSetChanged();
+        notifyItemMoved(fromPosition,toPosition);
     }
 
     @Override
@@ -265,4 +264,5 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements Co
             courseNames[it.nextIndex()]=((Course)it.next()).courseName;
         CourseListManipulate.resetCoursePriority(rootView.getContext(), courseNames);
     }
+
 }

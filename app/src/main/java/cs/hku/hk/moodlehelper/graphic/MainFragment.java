@@ -37,10 +37,15 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
     private ItemTouchHelper mItemTouchHelper;
     private NavItemListener setter;
     private View.OnClickListener menuOpenListener;
+    private RecyclerView.ItemAnimator itemAnimator;
 
     void setSetter(NavItemListener setter)
     {
         this.setter = setter;
+    }
+
+    void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
+        this.itemAnimator = itemAnimator;
     }
 
     @Nullable
@@ -71,6 +76,7 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
         coursesList = view.findViewById(R.id.main_courses_list);
         coursesList.setLayoutManager(mManager);
         coursesList.setAdapter(mAdapter);
+        coursesList.setItemAnimator(itemAnimator);
 
         if(mItemTouchHelper==null)
             mItemTouchHelper= new ItemTouchHelper(new CourseCardMover(mAdapter));
@@ -171,6 +177,7 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
     {
         final MainFragment f = new MainFragment();
         f.setSetter(setter);
+        f.setItemAnimator(new FlyAnimator());
         f.menuOpenListener = new View.OnClickListener()
         {
             @Override

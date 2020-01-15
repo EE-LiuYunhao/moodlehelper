@@ -271,4 +271,20 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
         }
         super.onViewRecycled(holder);
     }
+
+    int getCoursePosition(String courseName)
+    {
+        int i=0;
+        for(Course each : courses)
+        {
+            if(each.courseName.equals(courseName)) break;
+            i++;
+        }
+        return i;
+    }
+
+    void removeFromCourseList(int position)
+    {
+        courses.remove(position);
+    }
 }
