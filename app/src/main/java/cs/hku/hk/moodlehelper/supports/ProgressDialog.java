@@ -2,11 +2,15 @@ package cs.hku.hk.moodlehelper.supports;
 
 import android.app.AlertDialog;
 import android.os.Message;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -56,7 +60,9 @@ class ProgressDialog
         View dialogView = View.inflate(this.rootView.getContext(), R.layout.progress_dialog, null);
         builder.setView(dialogView);
         alertDialog = builder.create();
-
+        Window window = alertDialog.getWindow();
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        window.setWindowAnimations(R.style.dialog_anim);
 
         mProgressView = dialogView.findViewById(R.id.progress_view_widget);
         myHandler = new MyHandler(this);
@@ -76,6 +82,9 @@ class ProgressDialog
         textView.setText(resId);
         builder.setView(dialogView);
         alertDialog = builder.create();
+        Window window = alertDialog.getWindow();
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        window.setWindowAnimations(R.style.dialog_anim);
 
         mProgressView = dialogView.findViewById(R.id.progress_view_widget);
         myHandler = new MyHandler(this);

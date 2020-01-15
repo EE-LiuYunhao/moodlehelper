@@ -1,4 +1,4 @@
-package cs.hku.hk.moodlehelper.activities;
+package cs.hku.hk.moodlehelper.graphic;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,7 +26,6 @@ import android.widget.TextView;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
@@ -46,6 +45,8 @@ public class MoodleContent extends AppCompatActivity
 
     private String jstr;
 
+    private boolean showingGrade = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -57,6 +58,7 @@ public class MoodleContent extends AppCompatActivity
         Intent intent = getIntent();
         courseName=intent.getStringExtra("courseName");
         courseURL=(URL)intent.getSerializableExtra("url");
+        if("MyGrade".equals(courseName)) showingGrade=true;
         uid=intent.getStringExtra("uid");
         pin=intent.getStringExtra("pin");
 
@@ -164,7 +166,15 @@ public class MoodleContent extends AppCompatActivity
                         Log.d("JS", value);
                         if(value.equals("\"Success at clearViewElements()\""))
                         {
-                            webView.setVisibility(View.VISIBLE);
+                            if(showingGrade)
+                            {
+                                showingGrade = false;
+                                webView.loadUrl("https://moodle.hku.hk/grade/report/overview/index.php");
+                            }
+                            else
+                            {
+                                webView.setVisibility(View.VISIBLE);
+                            }
                         }
                     }
                 });

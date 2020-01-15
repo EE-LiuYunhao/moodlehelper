@@ -29,11 +29,19 @@
     <string name="sync_button">同步</string>
     <string name="currently_sync">正在同步…</string>
     <string name="load_failure">加载失败</string>
-    <string name="network_problem">网络未连接或者应用未获得网络权限</string>
+    <string name="network_problem">网络未连接或者应用未获得网络权限。</string>
+    <string name="sync_problem">请检查UID、PIN是否正确；以及网络连接是否断开。</string>
     <string name="UID_PIN_problem">请输入UID或者PIN</string>
     <string name="major_courses">Major 主修</string>
     <string name="minor_courses">Minor 辅修</string>
     <string name="cc_courses">Common Core 通识</string>
     <string name="default_courses">默认课程类别</string>
     <string name="change_category">更改课程类别</string>
+    <string name="title_activity_drawer_root">主界面</string>
+    <string name="menu_button_grade">我的成绩</string>
+    <string name="menu_button_setting">个人设置</string>
+    <string name="menu_button_sync">同步</string>
+    <string name="menu_button_clear_all">注销</string>
+    <string name="menu_button_courses">我的课程</string>
+    <string name="menu_group_function">功能</string>
 </resources>

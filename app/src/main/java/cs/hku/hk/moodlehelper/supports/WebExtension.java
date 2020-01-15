@@ -8,7 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -66,7 +68,7 @@ public class WebExtension extends WebViewClient
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(extension.rootContext);
                 builder.setTitle(R.string.load_failure)
-                       .setMessage(R.string.network_problem)
+                       .setMessage(R.string.sync_problem)
                        .setNeutralButton(R.string.confirm, new DialogInterface.OnClickListener()
                         {
                             @Override
@@ -76,7 +78,12 @@ public class WebExtension extends WebViewClient
                             }
                         });
                 extension.destroy();
-                builder.create().show();
+                extension.syncingDialog.dismiss();
+                AlertDialog dialog = builder.create();
+                Window window = dialog.getWindow();
+                Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+                window.setWindowAnimations(R.style.dialog_anim);
+                dialog.show();
             }
         }
     }
@@ -86,14 +93,15 @@ public class WebExtension extends WebViewClient
      * Constructor
      * @param rootContext the UI context in which the WebExtension is invoked
      * @param updatedView the view to be updated
+     * @param userName user's portal id
+     * @param userPIN user's portal password
      */
-    public WebExtension(Context rootContext, RecyclerView updatedView)
+    public WebExtension(Context rootContext, RecyclerView updatedView, String userName, String userPIN)
     {
         this.rootContext = rootContext;
         this.updatedView = updatedView;
-        SharedPreferences sp = rootContext.getSharedPreferences("user", Context.MODE_PRIVATE);
-        userName = sp.getString("portalID", "");
-        userPIN  = sp.getString("portalPIN","");
+        this.userName = userName;
+        this.userPIN  = userPIN;
         loadJavaScript();
 
         webView = new WebView(rootContext);
@@ -238,7 +246,11 @@ public class WebExtension extends WebViewClient
                         }
                     });
             destroy();
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
         else
         {
@@ -254,7 +266,11 @@ public class WebExtension extends WebViewClient
                        }
                    });
             destroy();
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
     }
 
@@ -299,7 +315,7 @@ public class WebExtension extends WebViewClient
 
             editor = spPriority.edit();
             int originalCategory = spPriority.getInt(courseName,0)%10;
-            editor.putInt(courseName, i*10+originalCategory);
+            editor.putInt(courseName, (array.length()-i)*10+originalCategory);
             editor.apply();
         }
     }
