@@ -11,9 +11,10 @@ appear in the webpage together with other courses. This makes the view messy.
 
 One solution to get rid of the mess is to access the courses via 
 [HKU Portal](https://hkuportal.hku.hk) website. But that one is not friendly to mobile device users 
-at all. Can you imagine that in the 21st century, the Portal website of a Top 30 university is not 
-responsive? Obviously, we can realize that accessing the courses resources on your mobile phone, no 
-matter which method to use, is annoying. 
+at all. Can you imagine that in the 21st century, the [Portal website](https://hkuportal.hku.hk) of a
+[Top 30 university](https://www.topuniversities.com/universities/university-hong-kong/undergrad)
+is not  responsive? Obviously, we can realize that accessing the courses resources on your mobile phone,
+no matter which method to use, is annoying. 
 
 #### Therefore, I have come up with this Android APP, enabling you to get to the courses you have enrolled in currently easily and conveniently. 
 
@@ -43,7 +44,7 @@ it onto your mobile phones.
 
 ### Requirements for devices: 
 1. Android Devices
-1. Version no lower than Android 9.0
+1. Version no lower than [Android 9.0 Pie](https://www.android.com/versions/pie-9-0/)
 1. Storage permission are granted
 1. With Internet connection
 
@@ -59,9 +60,9 @@ The source codes are located in
 
 There exist **TWO** packages. 
 
-[**graphic**](https://github.com/EE-LiuYunhao/moodlehelper/tree/master/app/src/main/java/cs/hku/hk/moodlehelper/graphic)
-contains the JAVA files for UI components and 
-[**support**](https://github.com/EE-LiuYunhao/moodlehelper/tree/master/app/src/main/java/cs/hku/hk/moodlehelper/supports)
+  - [**graphic**](https://github.com/EE-LiuYunhao/moodlehelper/tree/master/app/src/main/java/cs/hku/hk/moodlehelper/graphic)
+contains the JAVA files for UI components, and 
+  - [**support**](https://github.com/EE-LiuYunhao/moodlehelper/tree/master/app/src/main/java/cs/hku/hk/moodlehelper/supports)
 contains those for adapters, customized listeners and etc. 
 
 Resources file are in 
@@ -71,6 +72,7 @@ The javascripts which interact with Moodle website and layouts are in
 [`./app/src/main/java/src/main/assets`](https://github.com/EE-LiuYunhao/moodlehelper/tree/master/app/src/main/assets). 
 
 ## Planned features
+*Click [here](https://github.com/EE-LiuYunhao/moodlehelper/projects) to view the project TODO list*
 - [x] Enable syncing with HKU Portal E-Learning. 
 - [ ] Beautify the outlook and layouts.
 - [x] Display the course names togethe with the course codes. 
