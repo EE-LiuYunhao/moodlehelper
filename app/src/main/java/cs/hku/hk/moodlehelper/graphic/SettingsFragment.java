@@ -16,9 +16,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -224,6 +226,9 @@ public class SettingsFragment extends Fragment implements CourseCardBaseAdapter.
                             }
                         });
                 AlertDialog addCourseDialog = builder.create();
+                Window window = addCourseDialog.getWindow();
+                Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+                window.setWindowAnimations(R.style.dialog_anim);
                 addCourseDialog.show();
             }
         };

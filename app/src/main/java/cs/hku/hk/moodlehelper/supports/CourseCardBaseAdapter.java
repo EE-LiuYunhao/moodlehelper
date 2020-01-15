@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -90,7 +93,12 @@ public class CourseCardBaseAdapter extends RecyclerView.Adapter<CourseCardBaseAd
                         dialog.cancel();
                     }
                 });
-        builder.create().show();
+
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        window.setWindowAnimations(R.style.dialog_anim);
+        dialog.show();
     }
 
     /**

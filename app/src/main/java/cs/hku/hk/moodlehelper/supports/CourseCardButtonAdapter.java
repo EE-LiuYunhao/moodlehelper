@@ -3,8 +3,10 @@ package cs.hku.hk.moodlehelper.supports;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -182,6 +185,9 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements Co
                             });
                         }
                     }
+                    Window window = alertDialog.getWindow();
+                    Objects.requireNonNull(window).setWindowAnimations(R.style.dialog_anim);
+                    window.setGravity(Gravity.CENTER);
                     alertDialog.show();
                 }
             });
@@ -231,20 +237,7 @@ public class CourseCardButtonAdapter extends CourseCardBaseAdapter implements Co
                     }
                 });
             }
-            else
-            {
-                alertNoCourses();
-            }
         }
-        else
-        {
-            alertNoCourses();
-        }
-    }
-
-    private void alertNoCourses()
-    {
-        Toast.makeText(rootView.getContext(), R.string.no_course, Toast.LENGTH_SHORT).show();
     }
 
     @Override

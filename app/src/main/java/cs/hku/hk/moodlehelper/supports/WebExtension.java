@@ -8,7 +8,9 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.ValueCallback;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -77,7 +79,11 @@ public class WebExtension extends WebViewClient
                         });
                 extension.destroy();
                 extension.syncingDialog.dismiss();
-                builder.create().show();
+                AlertDialog dialog = builder.create();
+                Window window = dialog.getWindow();
+                Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+                window.setWindowAnimations(R.style.dialog_anim);
+                dialog.show();
             }
         }
     }
@@ -240,7 +246,11 @@ public class WebExtension extends WebViewClient
                         }
                     });
             destroy();
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
         else
         {
@@ -256,7 +266,11 @@ public class WebExtension extends WebViewClient
                        }
                    });
             destroy();
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
     }
 

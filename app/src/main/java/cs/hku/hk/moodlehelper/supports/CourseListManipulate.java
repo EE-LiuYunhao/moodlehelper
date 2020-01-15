@@ -8,8 +8,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
+
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -73,7 +77,11 @@ public class CourseListManipulate
                     }
                 });
 
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        Window window = dialog.getWindow();
+        Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+        window.setWindowAnimations(R.style.dialog_anim);
+        return dialog;
     }
 
     /**

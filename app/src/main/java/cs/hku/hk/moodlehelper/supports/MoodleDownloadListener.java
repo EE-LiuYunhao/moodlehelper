@@ -15,7 +15,9 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
 import android.util.LongSparseArray;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.URLUtil;
@@ -25,6 +27,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 
@@ -100,7 +103,11 @@ public class MoodleDownloadListener implements DownloadListener
                                 dialog.dismiss();
                             }
                         });
-                builder.show();
+                AlertDialog dialog = builder.create();
+                Window window = dialog.getWindow();
+                Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+                window.setWindowAnimations(R.style.dialog_anim);
+                dialog.show();
             }
         }
         else

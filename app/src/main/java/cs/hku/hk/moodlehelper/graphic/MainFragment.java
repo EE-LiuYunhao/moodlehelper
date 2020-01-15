@@ -6,9 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,7 +120,11 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
                             dialog.cancel();
                         }
                     });
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
         else
         {
@@ -132,7 +138,12 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
                             dialog.cancel();
                         }
                     });
-            builder.create().show();
+
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
     }
 

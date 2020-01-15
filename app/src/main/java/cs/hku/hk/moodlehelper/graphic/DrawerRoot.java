@@ -15,13 +15,16 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Objects;
 
 import cs.hku.hk.moodlehelper.R;
 import cs.hku.hk.moodlehelper.supports.WebExtension;
@@ -248,7 +251,11 @@ public class DrawerRoot extends AppCompatActivity implements NavigationView.OnNa
                             dialog.cancel();
                         }
                     });
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
         else
         {
@@ -262,7 +269,11 @@ public class DrawerRoot extends AppCompatActivity implements NavigationView.OnNa
                             dialog.cancel();
                         }
                     });
-            builder.create().show();
+            AlertDialog dialog = builder.create();
+            Window window = dialog.getWindow();
+            Objects.requireNonNull(window).setGravity(Gravity.CENTER);
+            window.setWindowAnimations(R.style.dialog_anim);
+            dialog.show();
         }
     }
 }
