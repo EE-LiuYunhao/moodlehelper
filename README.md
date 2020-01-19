@@ -27,6 +27,7 @@ The dialogs:
 
 <img src=".idea/img/1.jpg" alt="Loading dialog" width="20%"></img>
 <img src=".idea/img/5.jpg" alt="Editing dialog" width="20%"></img>
+<img src=".idea/img/6.jpg" alt="Editing dialog" width="20%"></img>
 
 ## Basic Functionalities: 
 
