@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1480F7</color>
-    <color name="colorPrimaryShadow">#EB5893D6</color>
-    <color name="colorPrimaryDark">#E61460F7</color>
+    <color name="colorPrimary">#646464</color>
+    <color name="colorPrimaryShadow">#ADADC6</color>
+    <color name="colorPrimaryDark">#555555</color>
     <color name="colorAccent">#00C0FA</color>
-    <color name="cardBackGround">#C881D1E9</color>
+    <color name="fabBackgroundColor">#9ED0F8</color>
+    <color name="fabRippleColor">#B2C7E8</color>
+    <color name="cardBackGround">#C8E2F3FF</color>
     <color name="colorSelfDefinedHint">#6B6B6B</color>
-    <color name="colorBackground">#f5eede</color>
+    <color name="colorBackground">#F8F5F0</color>
     <color name="colorText">#000000</color>
     <color name="transparent_background">#00000000</color>
     <color name="progress_foreground">#FF0066</color>
-    <color name="major_courses">#E9B1EF</color>
-    <color name="minor_courses">#AAD5E0</color>
-    <color name="common_core_courses">#98C3A6</color>
+    <color name="major_courses">#E9D7F3</color>
+    <color name="minor_courses">#B3C6D1</color>
+    <color name="common_core_courses">#DAE9DD</color>
     <color name="menu_button_tint">#001C79</color>
 </resources>
