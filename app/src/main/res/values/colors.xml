@@ -9,7 +9,10 @@
     <color name="cardBackGround">#C8E2F3FF</color>
     <color name="colorSelfDefinedHint">#6B6B6B</color>
     <color name="colorBackground">#F8F5F0</color>
+<<<<<<< HEAD
     <color name="colorToolBarBackground">#F8F5EC</color>
+=======
+>>>>>>> master
     <color name="colorText">#000000</color>
     <color name="transparent_background">#00000000</color>
     <color name="progress_foreground">#FF0066</color>
