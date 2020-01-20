@@ -64,7 +64,6 @@ public class MoodleContent extends AppCompatActivity
 
         //set the toolbar
         Toolbar toolbar = findViewById(R.id.settingsActivityToolBar);
-        toolbar.setLogo(R.drawable.ic_main_activity_logo);
         TextView titleName = findViewById(R.id.courseName);
         titleName.setText(courseName);
         setSupportActionBar(toolbar);

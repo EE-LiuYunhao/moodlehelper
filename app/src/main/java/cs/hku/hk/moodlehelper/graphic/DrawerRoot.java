@@ -112,7 +112,31 @@ public class DrawerRoot extends AppCompatActivity implements NavigationView.OnNa
                 }
                 break;
             case R.id.menu_item_clear_all:
-                //TODO: call clean (not implemented)
+                SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.clear();
+                editor.apply();
+
+                sp = getSharedPreferences("courses", MODE_PRIVATE);
+                editor = sp.edit();
+                editor.clear();
+                editor.apply();
+
+                sp = getSharedPreferences("names", MODE_PRIVATE);
+                editor = sp.edit();
+                editor.clear();
+                editor.apply();
+
+                sp = getSharedPreferences("PriorityCategory",MODE_PRIVATE);
+                editor = sp.edit();
+                editor.clear();
+                editor.apply();
+
+                if(currentFragment instanceof  MainFragment)
+                    ((MainFragment)currentFragment).refreshView();
+                else if (currentFragment instanceof SettingsFragment)
+                    ((SettingsFragment)currentFragment).refreshView();
+                break;
             default:
                 break;
         }
@@ -124,17 +148,18 @@ public class DrawerRoot extends AppCompatActivity implements NavigationView.OnNa
     protected void onResume()
     {
         super.onResume();
-        SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
-        String uid = sp.getString("portalID","");
-
         View headerView = mNavigate.getHeaderView(0);
         TextView headerInitial = headerView.findViewById(R.id.header_initial);
         TextView headerText = headerView.findViewById(R.id.header_text);
 
+        SharedPreferences sp = getSharedPreferences("user", MODE_PRIVATE);
+        String uid = sp.getString("portalID","");
         headerText.setText(uid);
         char [] init = new char[2];
-        init[0] = Character.toUpperCase(uid.charAt(0));
-        init[1] = uid.charAt(1);
+        if(!uid.equals(""))
+            init[0] = Character.toUpperCase(uid.charAt(0));
+        if(uid.length()>1)
+            init[1] = uid.charAt(1);
         headerInitial.setText(new String(init));
 
         mainFragment.setSetter(this);
@@ -215,6 +240,22 @@ public class DrawerRoot extends AppCompatActivity implements NavigationView.OnNa
     public void configActionBar()
     {
         mDrawer.openDrawer(GravityCompat.START);
+    }
+
+    @Override
+    public void resetHeader(String name)
+    {
+        View headerView = mNavigate.getHeaderView(0);
+        TextView headerInitial = headerView.findViewById(R.id.header_initial);
+        TextView headerText = headerView.findViewById(R.id.header_text);
+
+        headerText.setText(name);
+        char [] init = new char[2];
+        if(!name.equals(""))
+            init[0] = Character.toUpperCase(name.charAt(0));
+        if(name.length()>1)
+            init[1] = name.charAt(1);
+        headerInitial.setText(new String(init));
     }
 
     private void openGradeMenu()

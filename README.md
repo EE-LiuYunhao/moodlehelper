@@ -18,16 +18,16 @@ no matter which method to use, is annoying.
 
 #### Therefore, I have come up with this Android APP, enabling you to get to the courses you have enrolled in currently easily and conveniently. 
 
-<img src=".idea/img/4.jpg" alt="Drawer layout" width="20%"></img>
-<img src=".idea/img/2.jpg" alt="Moodle content" width="20%"></img>
-<img src=".idea/img/3-1.jpg" alt="Cards for courses" width="20%"></img>
-<img src=".idea/img/3.jpg" alt="Setting activities" width="20%"></img>
+<img src=".idea/img/4.png" alt="Drawer layout" width="20%"></img>
+<img src=".idea/img/2.png" alt="Moodle content" width="20%"></img>
+<img src=".idea/img/3-1.png" alt="Cards for courses" width="20%"></img>
+<img src=".idea/img/3.png" alt="Setting activities" width="20%"></img>
 
 The dialogs:
 
-<img src=".idea/img/1.jpg" alt="Loading dialog" width="20%"></img>
-<img src=".idea/img/5.jpg" alt="Editing dialog" width="20%"></img>
-<img src=".idea/img/6.jpg" alt="Editing dialog" width="20%"></img>
+<img src=".idea/img/1.png" alt="Loading dialog" width="20%"></img>
+<img src=".idea/img/5.png" alt="Editing dialog" width="20%"></img>
+<img src=".idea/img/6.png" alt="Editing dialog" width="20%"></img>
 
 ## Basic Functionalities: 
 

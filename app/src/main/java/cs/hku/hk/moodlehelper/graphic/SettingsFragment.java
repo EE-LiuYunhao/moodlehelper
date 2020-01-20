@@ -119,7 +119,7 @@ public class SettingsFragment extends Fragment implements CourseCardBaseAdapter.
         CourseListManipulate.editCourseItem(view.getContext(), mAdapter, name).show();
     }
 
-    private void refreshView()
+    void refreshView()
     {
         mAdapter.refreshCourseList();
         mAdapter.notifyDataSetChanged();
@@ -158,6 +158,7 @@ public class SettingsFragment extends Fragment implements CourseCardBaseAdapter.
         editor.putString("portalID", portalIDStr);
         editor.putString("portalPIN", portalPINStr);
         editor.apply();
+        setter.resetHeader(portalIDStr);
     }
 
     void externalSyncRequest(View v)
@@ -246,6 +247,8 @@ public class SettingsFragment extends Fragment implements CourseCardBaseAdapter.
                 }
                 f.extension = new WebExtension(Objects.requireNonNull(f.getContext()), f.coursesList, userName, userPIN);
                 f.extension.execute();
+                if(f.setter!=null)
+                    f.setter.resetHeader(userName);
             }
         };
         f.menuOpenListener = new View.OnClickListener()

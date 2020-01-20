@@ -44,7 +44,7 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
         this.setter = setter;
     }
 
-    void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
+    private void setItemAnimator(RecyclerView.ItemAnimator itemAnimator) {
         this.itemAnimator = itemAnimator;
     }
 
@@ -165,7 +165,7 @@ public class MainFragment extends Fragment implements CourseCardButtonAdapter.It
         return coursesList;
     }
 
-    private void refreshView()
+    void refreshView()
     {
         mAdapter.refreshCourseList();
         mAdapter.notifyDataSetChanged();

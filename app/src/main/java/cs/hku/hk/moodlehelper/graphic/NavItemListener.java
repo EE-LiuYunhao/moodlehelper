@@ -12,4 +12,5 @@ public interface NavItemListener
     int NONE = 0;
     void onMenuItemReselected(int itemId);
     void configActionBar();
+    void resetHeader(String name);
 }
